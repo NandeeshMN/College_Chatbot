@@ -1,0 +1,137 @@
+.testimonialsWrapper {
+    width: 100%;
+}
+
+.headingWrapper {
+    text-align: center;
+    padding: 4rem 0 2rem;
+    background-color: var(--color-white);
+}
+
+.heading {
+    font-size: 2.5rem;
+    color: var(--color-black);
+    font-weight: 700;
+}
+
+.highlightText {
+    color: var(--color-primary); /* CBS Blue */
+}
+
+.sliderBg {
+    background: linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75)), url('../../assets/hero_bg_common.png');
+    background-size: cover;
+    background-position: center;
+    padding: 5rem 0 6rem;
+    position: relative;
+}
+
+.sliderContainer {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.slider {
+    position: relative;
+    min-height: 400px;
+}
+
+.slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.6s ease-in-out;
+    pointer-events: none;
+    text-align: center;
+}
+
+.active {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: all;
+    position: relative;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 1rem;
+}
+
+.quoteIcon {
+    margin-bottom: 0.5rem;
+}
+
+.quoteOutline {
+    font-size: 7rem;
+    line-height: 0.8;
+    color: transparent;
+    -webkit-text-stroke: 2px #ff5722; /* Orange-red outline */
+    font-family: Georgia, serif;
+    display: inline-block;
+}
+
+.quote {
+    font-size: 1.15rem;
+    font-weight: 500;
+    color: var(--color-white);
+    margin-bottom: 2.5rem;
+    line-height: 1.6;
+    max-width: 800px;
+    text-align: center;
+}
+
+.author {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.avatar {
+    width: 65px;
+    height: 65px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid rgba(255, 255, 255, 0.8);
+}
+
+.name {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--color-white);
+    margin: 0;
+}
+
+.dots {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.6rem;
+    margin-top: 3rem;
+    position: absolute;
+    bottom: -30px;
+    left: 0;
+    right: 0;
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.5);
+    transition: all 0.3s;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+.activeDot {
+    background-color: #007cc3; /* Blue to match image */
+    width: 10px;
+    height: 10px;
+}

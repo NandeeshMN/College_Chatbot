@@ -1,0 +1,131 @@
+.pageContainer {
+    padding-top: 100px;
+}
+
+/* Hero Section - Matching standardized style */
+.heroSection {
+    background: linear-gradient(rgba(0, 51, 102, 0.6), rgba(0, 51, 102, 0.6)), url('../../assets/hero_bg_common.png');
+    background-size: cover;
+    background-position: center 25%;
+    padding: 8rem 0;
+    color: #ffffff;
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+.heroTitle {
+    font-size: 3.5rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    color: #ffffff;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    text-transform: uppercase;
+}
+
+.breadcrumbs {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    font-size: 1rem;
+    background-color: #007cc3;
+    color: white;
+    padding: 10px 30px;
+    border-radius: 50px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: relative;
+    top: 2rem;
+}
+
+.breadcrumbLink {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    transition: opacity 0.2s;
+}
+
+.breadcrumbLink:hover {
+    text-decoration: underline;
+    opacity: 0.9;
+}
+
+.separator {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* Recruiters Grid */
+.recruitersSection {
+    padding-bottom: 5rem;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+    align-items: center;
+    /* Vertically center in the row */
+}
+
+@media (max-width: 1024px) {
+    .grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.logoCard {
+    background-color: white;
+    padding: 1rem;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* border: 1px solid #eee; Optional border */
+    transition: transform 0.2s, box-shadow 0.2s;
+    height: 120px;
+    /* Fixed height for consistency */
+}
+
+.logoCard:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+}
+
+.logoPlaceholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f9f9f9;
+    color: #666;
+    font-weight: 600;
+    text-align: center;
+    border-radius: 4px;
+    font-size: 0.9rem;
+}
+
+/* If images are used later */
+.logoCard img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    filter: grayscale(100%);
+    /* Optional: grayscale until hover */
+    transition: filter 0.3s;
+}
+
+.logoCard:hover img {
+    filter: grayscale(0%);
+}

@@ -1,0 +1,265 @@
+.pageContainer {
+    padding-top: 100px;
+}
+
+/* Hero Section */
+.heroSection {
+    background: linear-gradient(rgba(0, 51, 102, 0.6), rgba(0, 51, 102, 0.6)), url('../assets/hero_bg_common.png');
+    /* Reuse existing hero image or placeholder */
+    background-size: cover;
+    background-position: center;
+    padding: 8rem 0;
+    color: var(--color-white);
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.heroTitle {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    color: #ffffff;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    text-transform: uppercase;
+}
+
+.breadcrumbs {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    font-size: 1rem;
+    background-color: #007cc3;
+    color: white;
+    padding: 10px 30px;
+    border-radius: 50px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: relative;
+    top: 2rem;
+}
+
+.breadcrumbLink {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    transition: opacity 0.2s;
+}
+
+.breadcrumbLink:hover {
+    text-decoration: underline;
+    opacity: 0.9;
+}
+
+.separator {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.contentWrapper {
+    margin-bottom: 4rem;
+}
+
+.sectionTitle {
+    text-align: center;
+    font-size: 2rem;
+    color: #007cc3;
+    margin-bottom: 3rem;
+    font-weight: 700;
+}
+
+.highlight {
+    color: var(--color-gray-900);
+}
+
+.gridContainer {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+}
+
+@media (max-width: 992px) {
+    .gridContainer {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+}
+
+/* Left Column */
+.infoColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.infoCard {
+    background-color: #f0f9ff;
+    /* Light blue tint */
+    padding: 2rem;
+    border-radius: 8px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.addressCard {
+    background-color: #fff9ed;
+    /* Light beige/orange tint */
+}
+
+.iconCircle {
+    background-color: white;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.infoValue {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--color-gray-900);
+    margin-bottom: 0.5rem;
+}
+
+.addressText {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--color-gray-900);
+    line-height: 1.5;
+    margin-bottom: 0.5rem;
+}
+
+.infoLabel {
+    color: var(--color-gray-600);
+    font-size: 0.9rem;
+}
+
+/* Table */
+.tableContainer {
+    margin-top: 1rem;
+    background-color: #f9fafb;
+    padding: 1rem;
+    border-radius: 8px;
+}
+
+.tableTitle {
+    text-align: center;
+    margin-bottom: 1rem;
+    color: var(--color-gray-800);
+}
+
+.distanceTable {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+.distanceTable th,
+.distanceTable td {
+    padding: 0.8rem;
+    text-align: left;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.distanceTable th {
+    background-color: #f3f4f6;
+    font-weight: 600;
+}
+
+.distanceTable tr:last-child td {
+    border-bottom: none;
+}
+
+/* Right Column - Form */
+.formColumn {
+    background-color: #003366;
+    /* Deep blue background */
+    padding: 2.5rem;
+    border-radius: 8px;
+    color: white;
+}
+
+.contactForm {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.input,
+.textarea {
+    width: 100%;
+    padding: 0.8rem;
+    border-radius: 4px;
+    border: none;
+    font-family: inherit;
+    font-size: 0.95rem;
+}
+
+.input:focus,
+.textarea:focus {
+    outline: 2px solid var(--color-secondary);
+}
+
+.checkboxGroup {
+    display: flex;
+    gap: 0.8rem;
+    align-items: flex-start;
+    margin-top: 0.5rem;
+}
+
+.checkbox {
+    margin-top: 0.3rem;
+}
+
+.checkboxLabel {
+    font-size: 0.8rem;
+    line-height: 1.4;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.submitButton {
+    background-color: #007cc3;
+    color: white;
+    border: none;
+    padding: 0.8rem 2rem;
+    border-radius: 4px;
+    font-weight: 600;
+    cursor: pointer;
+    align-self: flex-start;
+    margin-top: 1rem;
+    transition: background 0.2s;
+}
+
+.submitButton:hover {
+    background-color: #0099cc;
+}
+
+/* Map Section */
+.mapSection {
+    background-color: white;
+    padding-bottom: 0;
+}
+
+.mapTitle {
+    text-align: center;
+    font-size: 2rem;
+    color: #007cc3;
+    /* Blue "We Are" */
+    margin-bottom: 2rem;
+    font-weight: 700;
+}
+
+.blackText {
+    color: black;
+    /* Black "Located At" */
+}
+
+.mapContainer {
+    width: 100%;
+    height: 450px;
+    background-color: #e5e7eb;
+}

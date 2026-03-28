@@ -1,0 +1,160 @@
+.pageContainer {
+    padding-top: 100px;
+    padding-bottom: 4rem;
+}
+
+/* Hero Section */
+.heroSection {
+    background: linear-gradient(rgba(0, 51, 102, 0.6), rgba(0, 51, 102, 0.6)), url('../../assets/hero_bg_common.png');
+    /* Reuse hero image */
+    background-size: cover;
+    background-position: center;
+    padding: 8rem 0;
+    color: var(--color-white);
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+.heroTitle {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    color: #ffffff;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    text-transform: uppercase;
+}
+
+.breadcrumbs {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    font-size: 1rem;
+    background-color: #007cc3;
+    color: white;
+    padding: 10px 30px;
+    border-radius: 50px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: relative;
+    top: 2rem;
+}
+
+.breadcrumbLink {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    transition: opacity 0.2s;
+}
+
+.breadcrumbLink:hover {
+    text-decoration: underline;
+    opacity: 0.9;
+}
+
+.separator {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* Sections */
+.section {
+    margin-bottom: 5rem;
+    text-align: center;
+}
+
+.sectionTitle {
+    font-size: 2.5rem;
+    color: #007cc3;
+    /* CBS Blue */
+    font-weight: 700;
+    margin-bottom: 3rem;
+}
+
+.sectionTitleLink {
+    font-size: 2.5rem;
+    color: #007cc3;
+    font-weight: 700;
+    margin-bottom: 3rem;
+}
+
+.blackText {
+    color: black;
+}
+
+/* Grid Layout */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 3rem;
+    row-gap: 4rem;
+}
+
+@media (max-width: 1024px) {
+    .grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Staff Card */
+.card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.imageWrapper {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    border: 4px solid #007cc3;
+    /* Blue border */
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+    background-color: #f0f0f0;
+    /* Gray placeholder background */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.placeholderImage {
+    width: 100%;
+    height: 100%;
+    background-color: #e0e0e0;
+    background-image: url('data:image/svg+xml;utf8,<svg fill="%23cccccc" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 50%;
+}
+
+.image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.name {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.designation {
+    font-size: 0.95rem;
+    color: #666;
+    margin: 0;
+}

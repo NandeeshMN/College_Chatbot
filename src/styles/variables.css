@@ -1,0 +1,42 @@
+:root {
+  /* Brand Colors */
+  --color-primary: #003366;
+  /* Deep Blue */
+  --color-secondary: #FFCC00;
+  /* Gold/Amber */
+  --color-accent: #0099CC;
+  /* Light Blue */
+
+  /* Neutral Colors */
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --color-gray-50: #f9fafb;
+  --color-gray-100: #f3f4f6;
+  --color-gray-200: #e5e7eb;
+  --color-gray-800: #1f2937;
+  --color-gray-900: #111827;
+
+  /* Typography */
+  --font-primary: 'Inter', system-ui, sans-serif;
+  --font-secondary: 'Merriweather', serif;
+
+  /* Spacing */
+  --spacing-container: 1440px;
+  /* Widened to match expansive reference layout */
+  --spacing-padding: 2rem;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+}
+
+[data-theme='dark'] {
+  --color-white: #111827;
+  --color-black: #ffffff;
+  --color-gray-50: #1f2937;
+  --color-gray-100: #374151;
+  --color-gray-200: #4b5563;
+  --color-gray-800: #f3f4f6;
+  --color-gray-900: #f9fafb;
+}

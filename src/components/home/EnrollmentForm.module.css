@@ -1,0 +1,184 @@
+.enrollmentSection {
+    width: 100%;
+}
+
+.headingWrapper {
+    text-align: center;
+    padding: 4rem 0 3rem;
+    background-color: var(--color-white);
+}
+
+.heading {
+    font-size: 2.8rem;
+    color: var(--color-black);
+    font-weight: 700;
+}
+
+.highlightText {
+    color: var(--color-primary); /* CBS Blue (#007cc3) */
+}
+
+.formContainerBg {
+    background: linear-gradient(rgba(12, 58, 79, 0.9), rgba(12, 58, 79, 0.9)), url('../../assets/hero_bg_common.png');
+    background-size: cover;
+    background-position: center;
+    padding: 6rem 0;
+    position: relative;
+}
+
+.formContainer {
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+}
+
+.form {
+    width: 100%;
+    /* Add padding if we want an inner card style, but reference has fields on the background directly */
+    /* padding: 2rem; background: rgba(255,255,255,0.05); border-radius: 12px; */
+}
+
+.inputGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+.formGroupFull, .checkboxGroup, .submitGroup {
+    grid-column: span 2;
+}
+
+.inputField, .textArea {
+    width: 100%;
+    padding: 1rem 1.2rem;
+    border-radius: 6px;
+    border: 1px solid transparent;
+    background-color: var(--color-white);
+    font-size: 1rem;
+    font-family: inherit;
+    color: var(--color-gray-900);
+    transition: all 0.3s ease;
+}
+
+.inputField::placeholder, .textArea::placeholder {
+    color: var(--color-gray-400);
+}
+
+.inputField:focus, .textArea:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(0, 124, 195, 0.3);
+}
+
+.textArea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.phoneInputWrapper {
+    position: relative;
+    width: 100%;
+}
+
+.phonePrefix {
+    position: absolute;
+    left: 1.2rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-gray-900);
+    font-size: 1rem;
+    font-weight: 500;
+    pointer-events: none;
+    border-right: 1px solid var(--color-gray-300, #d1d5db);
+    padding-right: 0.5rem;
+}
+
+.phoneInput {
+    padding-left: 3.8rem;
+}
+
+.checkboxGroup {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.8rem;
+    margin-top: 0.5rem;
+}
+
+.checkbox {
+    margin-top: 0.2rem;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.checkboxLabel {
+    color: var(--color-white);
+    font-size: 0.85rem;
+    line-height: 1.4;
+    cursor: pointer;
+}
+
+.submitButton {
+    background-color: #3b82f6; /* Matching the bright blue button in reference */
+    color: white;
+    font-weight: 600;
+    font-size: 1rem;
+    padding: 0.8rem 2.5rem;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 1rem;
+}
+
+.submitButton:hover {
+    background-color: #2563eb;
+}
+
+.toast {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    padding: 1rem 2.5rem;
+    border-radius: 8px;
+    color: white;
+    font-weight: 600;
+    font-size: 1.1rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    animation: slideDown 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    pointer-events: none;
+    text-align: center;
+    max-width: 90vw;
+}
+
+.success {
+    background-color: #22c55e;
+}
+
+.error {
+    background-color: #ef4444;
+}
+
+@keyframes slideDown {
+    0% {
+        opacity: 0;
+        top: -50px;
+    }
+    100% {
+        opacity: 1;
+        top: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .inputGrid {
+        grid-template-columns: 1fr;
+    }
+    
+    .formGroupFull, .checkboxGroup, .submitGroup {
+        grid-column: span 1;
+    }
+}

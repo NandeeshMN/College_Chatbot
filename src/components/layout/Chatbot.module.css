@@ -1,0 +1,193 @@
+.toggleButton {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: var(--color-secondary);
+    color: var(--color-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow-lg);
+    z-index: 1000;
+    border: 2px solid var(--color-white);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.toggleButton:hover {
+    transform: scale(1.1);
+}
+
+.chatWindow {
+    position: fixed;
+    bottom: 6rem;
+    right: 2rem;
+    width: 350px;
+    height: 500px;
+    background-color: var(--color-white);
+    border-radius: 12px;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 1000;
+    opacity: 0;
+    transform: translateY(20px) scale(0.9);
+    pointer-events: none;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.chatWindow.open {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: all;
+}
+
+@media (max-width: 480px) {
+    .chatWindow {
+        right: 1rem;
+        left: 1rem;
+        width: auto;
+        bottom: 5rem;
+        height: 60vh;
+    }
+}
+
+.header {
+    background-color: var(--color-primary);
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--color-white);
+}
+
+.botInfo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.avatar {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background-color: var(--color-white);
+    color: var(--color-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 0.8rem;
+}
+
+.botName {
+    font-weight: 600;
+}
+
+.closeBtn {
+    color: var(--color-white);
+    opacity: 0.8;
+    transition: opacity 0.2s;
+}
+
+.closeBtn:hover {
+    opacity: 1;
+}
+
+.messages {
+    flex: 1;
+    padding: 1rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    background-color: var(--color-gray-50);
+}
+
+.message {
+    max-width: 80%;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.bot {
+    background-color: var(--color-white);
+    align-self: flex-start;
+    border-top-left-radius: 0;
+    box-shadow: var(--shadow-sm);
+    color: var(--color-gray-800);
+}
+
+.user {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    align-self: flex-end;
+    border-top-right-radius: 0;
+}
+
+.optionsGrid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.optionBtn {
+    background-color: var(--color-white);
+    border: 1px solid var(--color-primary);
+    color: var(--color-primary);
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    transition: all 0.2s;
+}
+
+.optionBtn:hover {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+}
+
+.footer {
+    padding: 0.75rem;
+    background-color: var(--color-white);
+    border-top: 1px solid var(--color-gray-200);
+    display: flex;
+    gap: 0.5rem;
+}
+
+.input {
+    flex: 1;
+    border: 1px solid var(--color-gray-200);
+    padding: 0.5rem 0.75rem;
+    border-radius: 20px;
+    outline: none;
+    font-family: inherit;
+    font-size: 0.9rem;
+}
+
+.input:focus {
+    border-color: var(--color-primary);
+}
+
+.sendBtn {
+    color: var(--color-primary);
+    padding: 0 0.5rem;
+}

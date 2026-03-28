@@ -1,0 +1,151 @@
+.footer {
+    background-color: var(--color-primary);
+    /* Deep Blue */
+    color: var(--color-white);
+    padding-top: 4rem;
+    font-size: 0.95rem;
+}
+
+.footerContent {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    padding-bottom: 4rem;
+}
+
+@media (min-width: 768px) {
+    .footerContent {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 1024px) {
+    .footerContent {
+        grid-template-columns: 1.2fr 0.8fr 1fr;
+        /* Adjust ratios to match visual */
+    }
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+}
+
+.heading {
+    color: #ffffff;
+    /* Explicitly set white */
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    position: relative;
+    padding-bottom: 0.5rem;
+}
+
+.heading::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 30px;
+    height: 2px;
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Contact List */
+.contactList {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+.contactItem {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    line-height: 1.5;
+}
+
+.contactItem a {
+    color: var(--color-white);
+    text-decoration: none;
+}
+
+.iconCircle {
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: -4px;
+    /* Align with text top */
+}
+
+/* Quick Links */
+.linksList {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.linksList a {
+    color: var(--color-white);
+    opacity: 0.9;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+.linksList a:hover {
+    opacity: 1;
+    padding-left: 5px;
+}
+
+/* Courses */
+.coursesList {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    margin-bottom: 2rem;
+}
+
+.coursesList a {
+    color: var(--color-white);
+    opacity: 0.9;
+    text-decoration: none;
+    line-height: 1.4;
+    display: block;
+}
+
+.coursesList a:hover {
+    opacity: 1;
+    text-decoration: underline;
+}
+
+.applyButton {
+    display: inline-block;
+    background-color: #0077b6;
+    /* Lighter blue for button as seen in image */
+    color: white;
+    padding: 0.8rem 1.5rem;
+    border-radius: 4px;
+    font-weight: 600;
+    text-transform: capitalize;
+    text-align: center;
+    transition: background-color 0.2s;
+    width: fit-content;
+}
+
+.applyButton:hover {
+    background-color: var(--color-accent);
+}
+
+/* Copyright */
+.copyright {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 1.5rem 0;
+    text-align: center;
+    font-size: 0.85rem;
+    opacity: 0.7;
+}
