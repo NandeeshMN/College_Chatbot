@@ -1,16 +1,60 @@
-# React + Vite
+### College Website with Chatbot
+---
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+### 📌 Project Description
+A college website integrated with an AI chatbot to provide academic information and automate student query handling. 
+The system includes dynamic web pages and an admin panel to manage content and chatbot responses efficiently.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### 🚀 Features
+- Dynamic college website (Home, About, Courses, Faculty, Contact)
+- AI-powered chatbot for student queries
+- Admin panel for chatbot management
+- Add/Edit chatbot questions and answers
+- Responsive UI design
+- Real-time query handling
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### 🛠️ Tech Stack
+- Frontend: HTML, CSS, JavaScript,ReactJS
+- Backend: Node.js
+- Database: MySQL
+- Chatbot:  AI-based logic
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### ⚙️ Modules
+- College Information Module
+- Faculty & Department Module
+- Courses & Admission Module
+- Admin Panel (Authentication + Management)
+- Chatbot System (Q&A Handling)
+
+---
+
+### 🔐 Admin Features
+- Secure admin login
+- Update chatbot knowledge base
+- Add/Edit/Delete data
+
+---
+
+### 📊 Project Workflow
+- Requirement Analysis
+- Database Design (ER Diagram, DFD)
+- System Architecture Design
+- Development (Frontend + Backend + Chatbot)
+- Testing & Optimization
+- Deployment & Documentation
+
+---
+
+### 🎯 Objective
+- Improve communication between students and college
+- Automate query handling using chatbot
+- Provide centralized access to academic information
+
+---
+
