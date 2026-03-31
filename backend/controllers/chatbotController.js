@@ -66,26 +66,66 @@ exports.deleteData = async (req, res) => {
   }
 };
 
-// ➤ GET CHATBOT RESPONSE
+// ➤ GET CHATBOT RESPONSE (Scoring-based keyword matching)
 exports.getChatbotResponse = async (req, res) => {
   try {
     const { message } = req.body;
 
-    // Find matching question (simple LIKE search)
-    const [rows] = await pool.execute(
-      'SELECT * FROM chatbot_data WHERE question LIKE ? LIMIT 1',
-      [`%${message}%`]
-    );
+    // Step 1: Normalize user input — lowercase and strip punctuation
+    const normalizedInput = message
+      .toLowerCase()
+      .replace(/[^a-z0-9\s]/gi, '')
+      .trim();
 
-    let response = "Sorry, I don't understand your question.";
-    let matchedId = null;
+    console.log('──────────────────────────────────');
+    console.log('📩 User Input:', message);
+    console.log('🔤 Normalized:', normalizedInput);
 
-    if (rows.length > 0) {
-      response = rows[0].answer;
-      matchedId = rows[0].data_id;
+    // Step 2: Fetch all chatbot data rows
+    const [rows] = await pool.execute('SELECT * FROM chatbot_data');
+
+    let bestMatch = null;
+    let highestScore = 0;
+
+    // Step 3: Score each row by keyword matches
+    for (const row of rows) {
+      // Split question field as comma-separated keywords, trim each
+      const keywords = row.question
+        .split(',')
+        .map(k => k.trim().toLowerCase())
+        .filter(k => k.length > 0);
+
+      let score = 0;
+
+      for (const keyword of keywords) {
+        // Partial matching: check if user input contains the keyword
+        if (normalizedInput.includes(keyword)) {
+          score++;
+        }
+      }
+
+      console.log(`   🔑 [ID ${row.data_id}] Keywords: [${keywords.join(', ')}] → Score: ${score}`);
+
+      if (score > highestScore) {
+        highestScore = score;
+        bestMatch = row;
+      }
     }
 
-    // Log query
+    // Step 4: Build response
+    let response = "Sorry, I don't understand your question. Please contact administration.";
+    let matchedId = null;
+
+    if (bestMatch && highestScore > 0) {
+      response = bestMatch.answer;
+      matchedId = bestMatch.data_id;
+      console.log(`✅ Best Match: ID ${matchedId} (Score: ${highestScore})`);
+    } else {
+      console.log('❌ No match found');
+    }
+    console.log('──────────────────────────────────');
+
+    // Step 5: Log query to query_log table
     await pool.execute(
       'INSERT INTO query_log (user_query, response, matched_data_id) VALUES (?, ?, ?)',
       [message, response, matchedId]

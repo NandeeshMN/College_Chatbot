@@ -1,3 +1,6 @@
+/* ========================
+   TOGGLE BUTTON
+   ======================== */
 .toggleButton {
     position: fixed;
     bottom: 2rem;
@@ -5,38 +8,149 @@
     width: 60px;
     height: 60px;
     border-radius: 50%;
-    background-color: var(--color-secondary);
+    background: linear-gradient(135deg, var(--color-secondary), #f0c040);
     color: var(--color-primary);
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: var(--shadow-lg);
-    z-index: 1000;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    z-index: 1001;
     border: 2px solid var(--color-white);
-    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    cursor: pointer;
+    /* Pop-in on page load */
+    animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) both,
+               pulse 3s ease-in-out 2s infinite;
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+                box-shadow 0.3s ease;
 }
 
 .toggleButton:hover {
-    transform: scale(1.1);
+    transform: scale(1.12);
+    box-shadow: 0 6px 28px rgba(0, 0, 0, 0.25),
+                0 0 0 6px rgba(var(--color-secondary-rgb, 244, 190, 55), 0.2);
 }
 
+.toggleButton.active {
+    animation: none;
+    transform: rotate(0deg);
+}
+
+/* Pop-in animation */
+@keyframes popIn {
+    0% {
+        opacity: 0;
+        transform: scale(0) translateY(20px);
+    }
+    60% {
+        opacity: 1;
+        transform: scale(1.15) translateY(-4px);
+    }
+    80% {
+        transform: scale(0.95) translateY(1px);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+/* Gentle pulse attention loop */
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
+    50% {
+        transform: scale(1.08);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2),
+                    0 0 0 10px rgba(244, 190, 55, 0.15);
+    }
+}
+
+
+/* ========================
+   WELCOME BUBBLE
+   ======================== */
+.welcomeBubble {
+    position: fixed;
+    bottom: 6.5rem;
+    right: 2rem;
+    background-color: var(--color-white);
+    color: var(--color-gray-800);
+    padding: 0.85rem 1.2rem;
+    padding-right: 2rem;
+    border-radius: 12px;
+    border-bottom-right-radius: 4px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+    font-size: 0.88rem;
+    line-height: 1.45;
+    max-width: 260px;
+    z-index: 1000;
+    cursor: pointer;
+    animation: bubbleSlideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.welcomeBubble:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.16);
+}
+
+.welcomeClose {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-gray-100, #f1f5f9);
+    color: var(--color-gray-500, #64748b);
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    transition: background 0.2s;
+}
+
+.welcomeClose:hover {
+    background: var(--color-gray-200, #e2e8f0);
+}
+
+@keyframes bubbleSlideIn {
+    0% {
+        opacity: 0;
+        transform: translateY(12px) scale(0.9);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+
+/* ========================
+   CHAT WINDOW
+   ======================== */
 .chatWindow {
     position: fixed;
     bottom: 6rem;
     right: 2rem;
-    width: 350px;
-    height: 500px;
+    width: 370px;
+    height: 520px;
     background-color: var(--color-white);
-    border-radius: 12px;
-    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.15);
+    border-radius: 16px;
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.18);
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    z-index: 1000;
+    z-index: 1001;
     opacity: 0;
-    transform: translateY(20px) scale(0.9);
+    transform: translateY(24px) scale(0.92);
     pointer-events: none;
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .chatWindow.open {
@@ -47,17 +161,27 @@
 
 @media (max-width: 480px) {
     .chatWindow {
-        right: 1rem;
-        left: 1rem;
+        right: 0.75rem;
+        left: 0.75rem;
         width: auto;
         bottom: 5rem;
-        height: 60vh;
+        height: 65vh;
+        border-radius: 14px;
+    }
+
+    .welcomeBubble {
+        right: 1rem;
+        max-width: 220px;
     }
 }
 
+
+/* ========================
+   HEADER
+   ======================== */
 .header {
-    background-color: var(--color-primary);
-    padding: 1rem;
+    background: linear-gradient(135deg, var(--color-primary), #1e3a5f);
+    padding: 1rem 1.2rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -71,8 +195,8 @@
 }
 
 .avatar {
-    width: 35px;
-    height: 35px;
+    width: 38px;
+    height: 38px;
     border-radius: 50%;
     background-color: var(--color-white);
     color: var(--color-primary);
@@ -80,51 +204,70 @@
     align-items: center;
     justify-content: center;
     font-weight: 800;
-    font-size: 0.8rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.5px;
 }
 
 .botName {
     font-weight: 600;
+    display: block;
+    font-size: 0.95rem;
+}
+
+.onlineStatus {
+    font-size: 0.7rem;
+    opacity: 0.8;
+    color: #7dffb3;
+    display: block;
+    margin-top: 1px;
 }
 
 .closeBtn {
     color: var(--color-white);
     opacity: 0.8;
-    transition: opacity 0.2s;
+    transition: opacity 0.2s, transform 0.2s;
+    background: none;
+    border: none;
+    cursor: pointer;
 }
 
 .closeBtn:hover {
     opacity: 1;
+    transform: scale(1.1);
 }
 
+
+/* ========================
+   MESSAGES
+   ======================== */
 .messages {
     flex: 1;
     padding: 1rem;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 0.75rem;
     background-color: var(--color-gray-50);
+    scroll-behavior: smooth;
 }
 
 .message {
-    max-width: 80%;
+    max-width: 82%;
     padding: 0.75rem 1rem;
-    border-radius: 8px;
-    font-size: 0.9rem;
-    line-height: 1.4;
-    animation: fadeIn 0.3s ease;
+    border-radius: 12px;
+    font-size: 0.88rem;
+    line-height: 1.5;
+    animation: messageSlideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-@keyframes fadeIn {
+@keyframes messageSlideIn {
     from {
         opacity: 0;
-        transform: translateY(5px);
+        transform: translateY(8px) scale(0.96);
     }
-
     to {
         opacity: 1;
-        transform: translateY(0);
+        transform: translateY(0) scale(1);
     }
 }
 
@@ -132,62 +275,131 @@
     background-color: var(--color-white);
     align-self: flex-start;
     border-top-left-radius: 0;
-    box-shadow: var(--shadow-sm);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
     color: var(--color-gray-800);
 }
 
 .user {
-    background-color: var(--color-primary);
+    background: linear-gradient(135deg, var(--color-primary), #1e3a5f);
     color: var(--color-white);
     align-self: flex-end;
     border-top-right-radius: 0;
 }
 
+
+/* ========================
+   TYPING INDICATOR
+   ======================== */
+.typingIndicator {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 0.8rem 1.2rem;
+    min-width: 60px;
+}
+
+.dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background-color: var(--color-gray-400, #94a3b8);
+    animation: dotBounce 1.4s ease-in-out infinite;
+}
+
+.dot:nth-child(2) {
+    animation-delay: 0.15s;
+}
+
+.dot:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+@keyframes dotBounce {
+    0%, 60%, 100% {
+        transform: translateY(0);
+        opacity: 0.5;
+    }
+    30% {
+        transform: translateY(-6px);
+        opacity: 1;
+    }
+}
+
+
+/* ========================
+   QUICK OPTIONS
+   ======================== */
 .optionsGrid {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5rem;
+    gap: 0.45rem;
     margin-top: 0.5rem;
+    animation: messageSlideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 .optionBtn {
     background-color: var(--color-white);
-    border: 1px solid var(--color-primary);
+    border: 1.5px solid var(--color-primary);
     color: var(--color-primary);
-    padding: 0.4rem 0.8rem;
+    padding: 0.4rem 0.85rem;
     border-radius: 20px;
-    font-size: 0.8rem;
-    transition: all 0.2s;
+    font-size: 0.78rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    text-decoration: none;
 }
 
 .optionBtn:hover {
     background-color: var(--color-primary);
     color: var(--color-white);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
+
+/* ========================
+   FOOTER / INPUT
+   ======================== */
 .footer {
-    padding: 0.75rem;
+    padding: 0.75rem 1rem;
     background-color: var(--color-white);
     border-top: 1px solid var(--color-gray-200);
     display: flex;
     gap: 0.5rem;
+    align-items: center;
 }
 
 .input {
     flex: 1;
-    border: 1px solid var(--color-gray-200);
-    padding: 0.5rem 0.75rem;
-    border-radius: 20px;
+    border: 1.5px solid var(--color-gray-200);
+    padding: 0.6rem 0.9rem;
+    border-radius: 24px;
     outline: none;
     font-family: inherit;
-    font-size: 0.9rem;
+    font-size: 0.88rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .input:focus {
     border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb, 26, 54, 93), 0.08);
 }
 
 .sendBtn {
     color: var(--color-primary);
-    padding: 0 0.5rem;
+    padding: 0.4rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+}
+
+.sendBtn:hover {
+    background: rgba(var(--color-primary-rgb, 26, 54, 93), 0.08);
+    transform: scale(1.1);
 }
