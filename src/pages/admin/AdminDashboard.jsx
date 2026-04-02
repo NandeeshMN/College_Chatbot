@@ -8,7 +8,11 @@ const AdminDashboard = () => {
     const [category, setCategory] = useState('');
     const [editingId, setEditingId] = useState(null);
     const [loading, setLoading] = useState(false);
-    const [message, setMessage] = useState({ text: '', type: '' });
+    const [excelFile, setExcelFile] = useState(null);
+    const [uploading, setUploading] = useState(false);
+    
+    // ➤ NEW TOAST STATE
+    const [toast, setToast] = useState({ show: false, text: '', type: '' });
     
     const navigate = useNavigate();
 
@@ -30,13 +34,14 @@ const AdminDashboard = () => {
             }
         } catch (error) {
             console.error('Error fetching data:', error);
-            showMessage('Error loading chatbot data', 'error');
+            showToast('Error loading chatbot data', 'error');
         }
     };
 
-    const showMessage = (text, type) => {
-        setMessage({ text, type });
-        setTimeout(() => setMessage({ text: '', type: '' }), 3000);
+    // ➤ NEW TOAST FUNCTION
+    const showToast = (text, type) => {
+        setToast({ show: true, text, type });
+        setTimeout(() => setToast({ show: false, text: '', type: '' }), 3000);
     };
 
     const handleSubmit = async (e) => {
@@ -62,21 +67,65 @@ const AdminDashboard = () => {
             const result = await response.json();
 
             if (result.success) {
-                showMessage(`Data ${editingId ? 'updated' : 'added'} successfully`, 'success');
+                showToast(`Data ${editingId ? 'updated' : 'added'} successfully`, 'success');
                 setQuestion('');
                 setAnswer('');
                 setCategory('');
                 setEditingId(null);
                 fetchData();
             } else {
-                showMessage(result.error || 'Operation failed', 'error');
+                showToast(result.error || 'Operation failed', 'error');
             }
         } catch (error) {
-            showMessage('Server error occurred', 'error');
+            showToast('Server error occurred', 'error');
         } finally {
             setLoading(false);
         }
     };
+
+    const handleExcelUpload = async (e) => {
+        e.preventDefault();
+        console.log("Excel upload triggered");
+
+        if (!excelFile) {
+            showToast("select the file to continue", "error");
+            return;
+        }
+
+        setUploading(true);
+        const formData = new FormData();
+        formData.append('file', excelFile);
+
+        try {
+            const response = await fetch('http://localhost:5000/api/admin/chatbot/upload', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
+                },
+                body: formData
+            });
+
+            const result = await response.json();
+            console.log("API Response:", result);
+
+            if (result.success) {
+                showToast("Excel uploaded Successfully", 'success');
+                setExcelFile(null);
+                // Reset file input
+                const fileInput = document.getElementById('excel-upload-input');
+                if (fileInput) fileInput.value = '';
+                fetchData();
+            } else {
+                showToast("failed to upload the file", 'error');
+            }
+        } catch (error) {
+            console.error('Upload error:', error);
+            showToast("failed to upload the file", 'error');
+        } finally {
+            setUploading(false);
+        }
+    };
+
 
     const handleEdit = (item) => {
         setEditingId(item.data_id);
@@ -100,13 +149,13 @@ const AdminDashboard = () => {
             const result = await response.json();
 
             if (result.success) {
-                showMessage('Data deleted successfully', 'success');
+                showToast('Data deleted successfully', 'success');
                 fetchData();
             } else {
-                showMessage('Failed to delete', 'error');
+                showToast('Failed to delete', 'error');
             }
         } catch (error) {
-            showMessage('Server error occurred', 'error');
+            showToast('Server error occurred', 'error');
         }
     };
 
@@ -117,7 +166,44 @@ const AdminDashboard = () => {
     };
 
     return (
-        <div style={{ padding: '6rem 2rem', minHeight: '100vh', backgroundColor: '#f4f7f6' }}>
+        <div style={{ padding: '6rem 2rem', minHeight: '100vh', backgroundColor: '#f4f7f6', position: 'relative' }}>
+            
+            {/* ➤ CUSTOM CENTERED TOAST COMPONENT */}
+            {toast.show && (
+                <div style={{
+                    position: 'fixed',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    zIndex: 9999,
+                    padding: '1.5rem 2.5rem',
+                    borderRadius: '12px',
+                    backgroundColor: toast.type === 'success' ? '#2f855a' : '#c53030',
+                    color: 'white',
+                    fontWeight: 'bold',
+                    boxShadow: '0 10px 25px rgba(0,0,0,0.2)',
+                    textAlign: 'center',
+                    minWidth: '300px',
+                    animation: 'fadeInOut 3s forwards',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    gap: '0.5rem'
+                }}>
+                    <div style={{ fontSize: '1.5rem' }}>{toast.type === 'success' ? '✔' : '❌'}</div>
+                    <div>{toast.text}</div>
+                    
+                    <style>{`
+                        @keyframes fadeInOut {
+                            0% { opacity: 0; transform: translate(-50%, -60%); }
+                            10% { opacity: 1; transform: translate(-50%, -50%); }
+                            90% { opacity: 1; transform: translate(-50%, -50%); }
+                            100% { opacity: 0; transform: translate(-50%, -40%); }
+                        }
+                    `}</style>
+                </div>
+            )}
+
             <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
                     <h1 style={{ color: '#1a365d', margin: 0 }}>Chatbot Admin Dashboard</h1>
@@ -129,20 +215,8 @@ const AdminDashboard = () => {
                     </button>
                 </div>
 
-                {message.text && (
-                    <div style={{ 
-                        padding: '1rem', 
-                        marginBottom: '2rem', 
-                        borderRadius: '5px', 
-                        backgroundColor: message.type === 'success' ? '#c6f6d5' : '#fed7d7',
-                        color: message.type === 'success' ? '#2f855a' : '#c53030'
-                    }}>
-                        {message.text}
-                    </div>
-                )}
-
                 <div style={{ backgroundColor: 'white', padding: '2rem', borderRadius: '8px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)', marginBottom: '3rem' }}>
-                    <h2 style={{ top: 0, marginTop: 0, marginBottom: '1.5rem', color: '#2d3748' }}>
+                    <h2 style={{ marginTop: 0, marginBottom: '1.5rem', color: '#2d3748' }}>
                         {editingId ? 'Edit Chatbot Data' : 'Add New Chatbot Data'}
                     </h2>
                     <form onSubmit={handleSubmit}>
@@ -200,6 +274,42 @@ const AdminDashboard = () => {
                                 </button>
                             )}
                         </div>
+                    </form>
+                </div>
+
+                {/* ➤ BULK UPLOAD SECTION */}
+                <div style={{ backgroundColor: 'white', padding: '2rem', borderRadius: '8px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)', marginBottom: '3rem', border: '1px dashed #cbd5e0' }}>
+                    <h2 style={{ marginTop: 0, marginBottom: '1rem', color: '#2d3748', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <span>📊 Bulk Upload Questions</span>
+                        <span style={{ fontSize: '0.875rem', fontWeight: 'normal', color: '#718096' }}>(Excel .xlsx only)</span>
+                    </h2>
+                    <p style={{ marginBottom: '1.5rem', color: '#4a5568' }}>
+                        Upload an Excel file with <strong>"questions"</strong> and <strong>"answers"</strong> columns for bulk insertion.
+                    </p>
+                    <form onSubmit={handleExcelUpload} style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                        <input 
+                            id="excel-upload-input"
+                            type="file" 
+                            accept=".xlsx, .xls"
+                            onChange={(e) => setExcelFile(e.target.files[0])}
+                            style={{ padding: '0.5rem', border: '1px solid #cbd5e0', borderRadius: '5px', flex: 1 }}
+                        />
+                        <button
+                            type="submit"
+                            disabled={uploading || !excelFile}
+                            style={{ 
+                                padding: '0.75rem 1.5rem', 
+                                backgroundColor: '#48bb78', 
+                                color: 'white', 
+                                border: 'none', 
+                                borderRadius: '5px', 
+                                fontWeight: 'bold', 
+                                cursor: (uploading || !excelFile) ? 'not-allowed' : 'pointer',
+                                opacity: (uploading || !excelFile) ? 0.7 : 1
+                            }}
+                        >
+                            {uploading ? 'Uploading...' : 'Upload Excel'}
+                        </button>
                     </form>
                 </div>
 

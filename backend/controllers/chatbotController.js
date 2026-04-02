@@ -1,4 +1,5 @@
 const pool = require('../config/mysql');
+const { tokenize, calculateScore } = require('../utils/chatbotUtils');
 
 // ➤ ADD DATA
 exports.addData = async (req, res) => {
@@ -66,20 +67,17 @@ exports.deleteData = async (req, res) => {
   }
 };
 
-// ➤ GET CHATBOT RESPONSE (Scoring-based keyword matching)
+// ➤ GET CHATBOT RESPONSE (Token-based matching logic)
 exports.getChatbotResponse = async (req, res) => {
   try {
     const { message } = req.body;
 
-    // Step 1: Normalize user input — lowercase and strip punctuation
-    const normalizedInput = message
-      .toLowerCase()
-      .replace(/[^a-z0-9\s]/gi, '')
-      .trim();
+    // Step 1: Tokenize user input
+    const userTokens = tokenize(message);
 
     console.log('──────────────────────────────────');
     console.log('📩 User Input:', message);
-    console.log('🔤 Normalized:', normalizedInput);
+    console.log('🔤 User Tokens:', userTokens);
 
     // Step 2: Fetch all chatbot data rows
     const [rows] = await pool.execute('SELECT * FROM chatbot_data');
@@ -87,25 +85,20 @@ exports.getChatbotResponse = async (req, res) => {
     let bestMatch = null;
     let highestScore = 0;
 
-    // Step 3: Score each row by keyword matches
+    // Step 3: Score each row by token matches
     for (const row of rows) {
-      // Split question field as comma-separated keywords, trim each
-      const keywords = row.question
-        .split(',')
-        .map(k => k.trim().toLowerCase())
-        .filter(k => k.length > 0);
+      // Tokenize the database question
+      // This handles both full questions and comma-separated keywords
+      const dbTokens = tokenize(row.question);
+      
+      const score = calculateScore(userTokens, dbTokens);
 
-      let score = 0;
-
-      for (const keyword of keywords) {
-        // Partial matching: check if user input contains the keyword
-        if (normalizedInput.includes(keyword)) {
-          score++;
-        }
+      if (score > 0) {
+          console.log(`   🔑 [ID ${row.data_id}] Tokens: [${dbTokens.join(', ')}] → Score: ${score}`);
       }
 
-      console.log(`   🔑 [ID ${row.data_id}] Keywords: [${keywords.join(', ')}] → Score: ${score}`);
-
+      // If score is high enough, consider it a match
+      // A threshold of 1 might be enough if tokens are descriptive
       if (score > highestScore) {
         highestScore = score;
         bestMatch = row;
@@ -144,3 +137,4 @@ exports.getChatbotResponse = async (req, res) => {
     });
   }
 };
+

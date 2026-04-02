@@ -1,5 +1,7 @@
-const express = require('express');
 const dotenv = require('dotenv');
+dotenv.config();
+
+const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
@@ -15,8 +17,7 @@ const adminRoutes = require('./routes/adminRoutes');
 const chatbotRoutes = require('./routes/chatbotRoutes');
 const errorHandler = require('./middlewares/errorMiddleware');
 
-// Load env vars
-dotenv.config();
+console.log('🔑 JWT_SECRET loaded:', process.env.JWT_SECRET ? 'YES' : '❌ MISSING');
 
 const bcrypt = require('bcrypt');
 

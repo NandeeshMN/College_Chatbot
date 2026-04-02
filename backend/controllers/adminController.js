@@ -7,17 +7,27 @@ const {
 const sendEmail = require('../services/emailService');
 const jwt = require('jsonwebtoken');
 const AppError = require('../utils/AppError');
+const xlsx = require('xlsx');
+const pool = require('../config/mysql');
+const path = require('path');
+const fs = require('fs');
 
 // Optional helper for JWT
 const generateToken = (id) => {
-    return jwt.sign({ id, role: 'admin' }, process.env.JWT_SECRET, {
+    return jwt.sign({ id, role: 'admin' }, "my_temp_secret", {
         expiresIn: '1d',
     });
 };
 
 exports.loginAdmin = async (req, res) => {
     try {
-        const { username, password } = req.body;
+        const username = req.body.username?.trim();
+        const password = req.body.password?.trim();
+
+        console.log('──────────────────────────────────');
+        console.log('🔐 Login Attempt');
+        console.log('   Input Username:', JSON.stringify(username));
+        console.log('   Input Password:', JSON.stringify(password));
 
         if (!username || !password) {
             return res.status(400).json({
@@ -28,27 +38,44 @@ exports.loginAdmin = async (req, res) => {
 
         const admin = await findAdminByUsername(username);
 
-        // if (!admin || admin.password !== password) {
-        //   return res.status(401).json({
-        //     success: false,
-        //     message: 'Invalid credentials'
-        //   });
-        // }
-        // 🔴 STRICT USERNAME CHECK (CASE-SENSITIVE)
-        if (!admin || admin.username !== username) {
+        console.log('   DB Result:', admin ? `Found (ID: ${admin.admin_id})` : 'NOT FOUND');
+
+        if (!admin) {
+            console.log('   ❌ User not found in database');
+            console.log('──────────────────────────────────');
+            return res.status(401).json({
+                success: false,
+                message: 'User not found'
+            });
+        }
+
+        console.log('   DB Username:', JSON.stringify(admin.username));
+        console.log('   DB Password:', JSON.stringify(admin.password));
+
+        // Case-sensitive username check
+        if (admin.username !== username) {
+            console.log('   ❌ Username mismatch (case-sensitive)');
+            console.log('──────────────────────────────────');
             return res.status(401).json({
                 success: false,
                 message: 'Invalid credentials'
             });
         }
 
-        // 🔴 PASSWORD CHECK
-        if (admin.password !== password) {
+        // Password check (trimmed comparison to handle DB whitespace)
+        if (admin.password.trim() !== password) {
+            console.log('   ❌ Password mismatch');
+            console.log(`   Expected length: ${admin.password.length}, Got length: ${password.length}`);
+            console.log('──────────────────────────────────');
             return res.status(401).json({
                 success: false,
-                message: 'Invalid credentials'
+                message: 'Invalid password'
             });
         }
+
+        console.log('   ✅ Login successful!');
+        console.log('──────────────────────────────────');
+
         const token = generateToken(admin.admin_id);
 
         res.json({
@@ -63,7 +90,7 @@ exports.loginAdmin = async (req, res) => {
         });
 
     } catch (error) {
-        console.error(error);
+        console.error('Login Error:', error);
         res.status(500).json({
             success: false,
             error: error.message
@@ -174,3 +201,86 @@ exports.resetPassword = async (req, res, next) => {
         });
     }
 };
+
+// ➤ UPLOAD CHATBOT EXCEL (Bulk insertion)
+exports.uploadChatbotExcel = async (req, res) => {
+    let filePath = null;
+    try {
+        if (!req.file) {
+            return res.status(400).json({ success: false, message: 'failed to upload the file' });
+        }
+
+        filePath = req.file.path;
+        console.log('Excel file uploaded to:', filePath);
+
+        // Read the Excel workbook
+        const workbook = xlsx.readFile(filePath);
+        const sheetName = workbook.SheetNames[0];
+        const sheet = workbook.Sheets[sheetName];
+        
+        // 1. STRICT HEADER VALIDATION
+        const rows = xlsx.utils.sheet_to_json(sheet, { header: 1 });
+        const headers = rows[0]; // First row contains headers
+
+        // Check for EXACT matches: "questions" and "answers"
+        const isValidHeaders = headers && 
+                              headers.length >= 2 && 
+                              headers[0] === 'questions' && 
+                              headers[1] === 'answers';
+
+        if (!isValidHeaders) {
+            console.log('❌ Header Validation Failed:', headers);
+            return res.status(400).json({ 
+                success: false, 
+                message: "Column mismatch: Excel must contain 'questions' and 'answers' headers" 
+            });
+        }
+
+        // 2. DATA PROCESSING
+        const rawData = xlsx.utils.sheet_to_json(sheet);
+        console.log(`Processing ${rawData.length} rows from Excel...`);
+
+        const validEntries = [];
+        for (const row of rawData) {
+            const question = row['questions']?.toString().trim();
+            const answer = row['answers']?.toString().trim();
+
+            if (question && answer) {
+                validEntries.push([question, answer, 'General']);
+            }
+        }
+
+        if (validEntries.length === 0) {
+            return res.status(400).json({ 
+                success: false, 
+                message: 'failed to upload the file' 
+            });
+        }
+
+        // Bulk Insert into MySQL
+        const query = 'INSERT INTO chatbot_data (question, answer, category) VALUES ?';
+        await pool.query(query, [validEntries]);
+
+        console.log(`✅ Bulk Upload Success: ${validEntries.length} inserted.`);
+
+        res.json({
+            success: true,
+            message: "Excel uploaded Successfully"
+        });
+
+    } catch (error) {
+        console.error('Bulk Upload Error:', error);
+        res.status(500).json({
+            success: false,
+            message: "failed to upload the file"
+        });
+    } finally {
+        // Delete the temporary file
+        if (filePath && fs.existsSync(filePath)) {
+            fs.unlinkSync(filePath);
+        }
+    }
+};
+
+
+
