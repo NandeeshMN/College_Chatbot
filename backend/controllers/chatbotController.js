@@ -1,14 +1,15 @@
 const pool = require('../config/mysql');
-const { tokenize, calculateScore } = require('../utils/chatbotUtils');
+const { tokenize, calculateScore, mapToIntent, processForDB } = require('../utils/chatbotUtils');
 
 // ➤ ADD DATA
 exports.addData = async (req, res) => {
   try {
     const { question, answer, category } = req.body;
+    const { tokens, intent_tokens } = processForDB(question);
 
     await pool.execute(
-      'INSERT INTO chatbot_data (question, answer, category) VALUES (?, ?, ?)',
-      [question, answer, category]
+      'INSERT INTO chatbot_data (question, answer, category, tokens, intent_tokens) VALUES (?, ?, ?, ?, ?)',
+      [question, answer, category, tokens, intent_tokens]
     );
 
     res.json({ success: true, message: 'Data added successfully' });
@@ -37,10 +38,11 @@ exports.updateData = async (req, res) => {
   try {
     const { id } = req.params;
     const { question, answer, category } = req.body;
+    const { tokens, intent_tokens } = processForDB(question);
 
     await pool.execute(
-      'UPDATE chatbot_data SET question = ?, answer = ?, category = ? WHERE data_id = ?',
-      [question, answer, category, id]
+      'UPDATE chatbot_data SET question = ?, answer = ?, category = ?, tokens = ?, intent_tokens = ? WHERE data_id = ?',
+      [question, answer, category, tokens, intent_tokens, id]
     );
 
     res.json({ success: true, message: 'Data updated successfully' });
@@ -72,12 +74,14 @@ exports.getChatbotResponse = async (req, res) => {
   try {
     const { message } = req.body;
 
-    // Step 1: Tokenize user input
-    const userTokens = tokenize(message);
+    // Step 1: Tokenize user input natively and by intent
+    const userTokensRaw = tokenize(message);
+    const userTokensIntent = userTokensRaw.map(t => mapToIntent(t));
 
     console.log('──────────────────────────────────');
     console.log('📩 User Input:', message);
-    console.log('🔤 User Tokens:', userTokens);
+    console.log('🔤 User Tokens:', userTokensRaw);
+    console.log('🎯 Intent Tokens:', userTokensIntent);
 
     // Step 2: Fetch all chatbot data rows
     const [rows] = await pool.execute('SELECT * FROM chatbot_data');
@@ -87,18 +91,23 @@ exports.getChatbotResponse = async (req, res) => {
 
     // Step 3: Score each row by token matches
     for (const row of rows) {
-      // Tokenize the database question
-      // This handles both full questions and comma-separated keywords
-      const dbTokens = tokenize(row.question);
+      // Fallback: Support old rows that haven't been re-saved yet
+      let dbTokensRaw, dbTokensIntent;
+      if (row.tokens && row.intent_tokens) {
+          dbTokensRaw = JSON.parse(row.tokens);
+          dbTokensIntent = JSON.parse(row.intent_tokens);
+      } else {
+          dbTokensRaw = tokenize(row.question);
+          dbTokensIntent = dbTokensRaw.map(t => mapToIntent(t));
+      }
       
-      const score = calculateScore(userTokens, dbTokens);
+      const score = calculateScore(userTokensRaw, userTokensIntent, dbTokensRaw, dbTokensIntent);
 
       if (score > 0) {
-          console.log(`   🔑 [ID ${row.data_id}] Tokens: [${dbTokens.join(', ')}] → Score: ${score}`);
+          console.log(`   🔑 [ID ${row.data_id}] Tokens: [${dbTokensRaw.join(', ')}] → Score: ${score.toFixed(2)}`);
       }
 
       // If score is high enough, consider it a match
-      // A threshold of 1 might be enough if tokens are descriptive
       if (score > highestScore) {
         highestScore = score;
         bestMatch = row;
@@ -109,10 +118,11 @@ exports.getChatbotResponse = async (req, res) => {
     let response = "Sorry, I don't understand your question. Please contact administration.";
     let matchedId = null;
 
+    // Notice highestScore > 0 works because valid tokens add >= 0.6 to the total
     if (bestMatch && highestScore > 0) {
       response = bestMatch.answer;
       matchedId = bestMatch.data_id;
-      console.log(`✅ Best Match: ID ${matchedId} (Score: ${highestScore})`);
+      console.log(`✅ Best Match: ID ${matchedId} (Score: ${highestScore.toFixed(2)})`);
     } else {
       console.log('❌ No match found');
     }

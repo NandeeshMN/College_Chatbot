@@ -36,7 +36,14 @@ export const navigationLinks = [
         path: '/cbs',
         dropdown: [
             { label: 'Grievance', path: '/cbs/grievance' },
-            { label: 'Mandatory Disclosure', path: '/cbs/mandatory-disclosure' },
+            { 
+                label: 'Mandatory Disclosure', 
+                path: '#', // Prevents direct navigation so users use dropdown
+                dropdown: [
+                    { label: 'Mandatory Disclosure(MBA)', path: '/cbs/mandatory-disclosure-mba' },
+                    { label: 'Mandatory Disclosure(MCA)', path: '/cbs/mandatory-disclosure-mca' }
+                ]
+            },
             { label: 'Payments', path: '/cbs/payments' },
             { label: 'Scholarship Details', path: '/cbs/scholarship' },
             { label: 'Anuragha', path: '/cbs/anuragha' },

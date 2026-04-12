@@ -11,7 +11,7 @@ const xlsx = require('xlsx');
 const pool = require('../config/mysql');
 const path = require('path');
 const fs = require('fs');
-
+const { processForDB } = require('../utils/chatbotUtils');
 // Optional helper for JWT
 const generateToken = (id) => {
     return jwt.sign({ id, role: 'admin' }, "my_temp_secret", {
@@ -246,7 +246,8 @@ exports.uploadChatbotExcel = async (req, res) => {
             const answer = row['answers']?.toString().trim();
 
             if (question && answer) {
-                validEntries.push([question, answer, 'General']);
+                const { tokens, intent_tokens } = processForDB(question);
+                validEntries.push([question, answer, 'General', tokens, intent_tokens]);
             }
         }
 
@@ -258,7 +259,7 @@ exports.uploadChatbotExcel = async (req, res) => {
         }
 
         // Bulk Insert into MySQL
-        const query = 'INSERT INTO chatbot_data (question, answer, category) VALUES ?';
+        const query = 'INSERT INTO chatbot_data (question, answer, category, tokens, intent_tokens) VALUES ?';
         await pool.query(query, [validEntries]);
 
         console.log(`✅ Bulk Upload Success: ${validEntries.length} inserted.`);

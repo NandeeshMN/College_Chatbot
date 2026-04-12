@@ -9,9 +9,12 @@ import PlacementProcess from './pages/placements/PlacementProcess';
 import TeachingStaff from './pages/about/TeachingStaff';
 import NonTeachingStaff from './pages/about/NonTeachingStaff';
 import PhotoGallery from './pages/activities/PhotoGallery';
+import VideoGallery from './pages/activities/VideoGallery';
 import Recruiters from './pages/placements/Recruiters';
 import AdminLogin from './pages/admin/AdminLogin';
 import AdminDashboard from './pages/admin/AdminDashboard';
+import Grievance from './pages/Grievance';
+import MandatoryDisclosure from './pages/MandatoryDisclosure';
 
 function App() {
   return (
@@ -23,11 +26,15 @@ function App() {
         <Route path="about/faculty/teaching" element={<TeachingStaff />} />
         <Route path="about/faculty/non-teaching" element={<NonTeachingStaff />} />
         <Route path="activities/photo-gallery" element={<PhotoGallery />} />
+        <Route path="activities/videos" element={<VideoGallery />} />
         <Route path="contact" element={<Contact />} />
         <Route path="placements/process" element={<PlacementProcess />} />
         <Route path="placements/recruiters" element={<Recruiters />} />
         <Route path="admin-login" element={<AdminLogin />} />
         <Route path="admin-dashboard" element={<AdminDashboard />} />
+        <Route path="cbs/grievance" element={<Grievance />} />
+        <Route path="cbs/mandatory-disclosure-mba" element={<MandatoryDisclosure type="MBA" />} />
+        <Route path="cbs/mandatory-disclosure-mca" element={<MandatoryDisclosure type="MCA" />} />
         {/* Placeholder routes for now */}
         <Route path="*" element={
           <div className="container" style={{ padding: '4rem 0', textAlign: 'center' }}>

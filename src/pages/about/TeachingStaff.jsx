@@ -22,6 +22,7 @@ import shwetaSajjanarImg from '../../assets/staff/prof_shweta_sajjanar.png';
 import shreyasImg from '../../assets/staff/prof_shreyas_murdeshwar.png';
 import ravikumarImg from '../../assets/staff/dr_ravikumar_roogi.png';
 import laliImg from '../../assets/staff/prof_shweta_lali.png';
+import almasImg from '../../assets/staff/Prof. Almas M.png.jpeg';
 
 // Placeholder for staff images - using a generic div in CSS if source is empty,
 // or we can use a temporary placeholder. For now, I'll use a transparent pixel or rely on alt text/CSS styling.
@@ -48,7 +49,7 @@ const teachingStaff = [
     { name: 'Prof. Shreyas Murdeshwar', designation: 'Assistant Professor', image: shreyasImg },
     { name: 'Dr. Ravikumar Roogi', designation: 'Assistant Professor', image: ravikumarImg },
     { name: 'Prof. Shweta Lali', designation: 'Teaching Associate', image: laliImg },
-    { name: 'Prof. Almas M', designation: 'Teaching Associate' },
+    { name: 'Prof. Almas M', designation: 'Teaching Associate', image: almasImg },
 ];
 
 const StaffCard = ({ name, designation, image }) => (

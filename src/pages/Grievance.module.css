@@ -1,0 +1,116 @@
+.pageContainer {
+    padding-top: 100px;
+}
+
+/* Hero Section */
+.heroSection {
+    background: linear-gradient(rgba(0, 51, 102, 0.6), rgba(0, 51, 102, 0.6)), url('../assets/hero_bg_common.png');
+    background-size: cover;
+    background-position: center;
+    padding: 8rem 0;
+    color: var(--color-white);
+    text-align: center;
+    margin-bottom: 5rem;
+}
+
+.heroTitle {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: #ffffff;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.breadcrumbs {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    font-size: 1rem;
+    background-color: #007cc3;
+    color: white;
+    padding: 10px 30px;
+    border-radius: 50px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: relative;
+    top: calc(8rem + 15px); /* Position overlapping the bottom */
+    margin-top: -8rem;
+}
+
+.breadcrumbLink {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    transition: opacity 0.2s;
+}
+
+.breadcrumbLink:hover {
+    text-decoration: underline;
+    opacity: 0.9;
+}
+
+.separator {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* Content Layout */
+.contentContainer {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 1.5rem 5rem 1.5rem;
+    position: relative;
+}
+
+.watermark {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0.03;
+    z-index: -1;
+    pointer-events: none;
+    width: 100%;
+    max-width: 600px;
+}
+
+.pageTitle {
+    text-align: center;
+    font-size: 2.2rem;
+    color: #007cc3;
+    margin-bottom: 3rem;
+    font-weight: 700;
+}
+
+.textContent {
+    color: #4a5568;
+    font-size: 1.05rem;
+    line-height: 1.8;
+}
+
+.paragraph {
+    margin-bottom: 2rem;
+    text-align: left;
+}
+
+.boldText {
+    font-weight: 700;
+    color: #2d3748;
+}
+
+.contactBlock {
+    margin: 2.5rem 0;
+}
+
+.contactLine {
+    margin-bottom: 1rem;
+    color: #2d3748;
+}
+
+.contactLine span {
+    font-weight: 700;
+    display: inline-block;
+}
+
+.closing {
+    margin-top: 2.5rem;
+}
