@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 const AdminLogin = () => {
-    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
@@ -19,7 +19,7 @@ const AdminLogin = () => {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ username, password })
+                body: JSON.stringify({ email, password })
             });
 
             const data = await response.json();
@@ -45,12 +45,13 @@ const AdminLogin = () => {
                 {error && <div style={{ backgroundColor: '#fed7d7', color: '#c53030', padding: '0.75rem', borderRadius: '5px', marginBottom: '1rem', fontSize: '0.875rem' }}>{error}</div>}
                 <form onSubmit={handleLogin}>
                     <div style={{ marginBottom: '1.5rem' }}>
-                        <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>Username</label>
+                        <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>Email</label>
                         <input
-                            type="text"
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
+                            type="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
                             required
+                            placeholder="Enter your email"
                             style={{ width: '100%', padding: '0.75rem', borderRadius: '5px', border: '1px solid #e2e8f0' }}
                         />
                     </div>
@@ -67,10 +68,18 @@ const AdminLogin = () => {
                     <button
                         type="submit"
                         disabled={loading}
-                        style={{ width: '100%', padding: '0.75rem', backgroundColor: '#1a365d', color: 'white', border: 'none', borderRadius: '5px', fontWeight: 'bold', cursor: loading ? 'not-allowed' : 'pointer' }}
+                        style={{ width: '100%', padding: '0.75rem', backgroundColor: '#1a365d', color: 'white', border: 'none', borderRadius: '5px', fontWeight: 'bold', cursor: loading ? 'not-allowed' : 'pointer', marginBottom: '1rem' }}
                     >
                         {loading ? 'Logging in...' : 'Login'}
                     </button>
+                    <div style={{ textAlign: 'center' }}>
+                        <Link 
+                            to="/forgot-password" 
+                            style={{ color: '#1a365d', textDecoration: 'none', fontSize: '0.875rem', fontWeight: '500' }}
+                        >
+                            Forgot Password?
+                        </Link>
+                    </div>
                 </form>
             </div>
         </div>

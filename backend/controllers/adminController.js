@@ -2,9 +2,13 @@ const {
     findAdminByUsername,
     findAdminByEmail,
     updateAdminOtp,
-    updateAdminPassword
+    updateAdminPassword,
+    incrementOtpAttempts,
+    setOtpVerified,
+    clearOtpData
 } = require('../models/adminModel');
-const sendEmail = require('../services/emailService');
+const { sendOtpEmail } = require('../services/emailService');
+const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const AppError = require('../utils/AppError');
 const xlsx = require('xlsx');
@@ -21,60 +25,44 @@ const generateToken = (id) => {
 
 exports.loginAdmin = async (req, res) => {
     try {
-        const username = req.body.username?.trim();
+        const emailInput = req.body.email?.trim().toLowerCase();
         const password = req.body.password?.trim();
 
-        console.log('──────────────────────────────────');
-        console.log('🔐 Login Attempt');
-        console.log('   Input Username:', JSON.stringify(username));
-        console.log('   Input Password:', JSON.stringify(password));
-
-        if (!username || !password) {
+        // Basic validation
+        if (!emailInput || !password) {
             return res.status(400).json({
                 success: false,
-                message: 'Please provide username and password'
+                message: 'Invalid email or password'
             });
         }
 
-        const admin = await findAdminByUsername(username);
+        // Email format validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(emailInput)) {
+            return res.status(401).json({
+                success: false,
+                message: 'Invalid email or password'
+            });
+        }
 
-        console.log('   DB Result:', admin ? `Found (ID: ${admin.admin_id})` : 'NOT FOUND');
+        const admin = await findAdminByEmail(emailInput);
 
         if (!admin) {
-            console.log('   ❌ User not found in database');
-            console.log('──────────────────────────────────');
             return res.status(401).json({
                 success: false,
-                message: 'User not found'
+                message: 'Invalid email or password'
             });
         }
 
-        console.log('   DB Username:', JSON.stringify(admin.username));
-        console.log('   DB Password:', JSON.stringify(admin.password));
-
-        // Case-sensitive username check
-        if (admin.username !== username) {
-            console.log('   ❌ Username mismatch (case-sensitive)');
-            console.log('──────────────────────────────────');
+        // Secure password check using bcrypt
+        const isMatch = await bcrypt.compare(password, admin.password.trim());
+        
+        if (!isMatch) {
             return res.status(401).json({
                 success: false,
-                message: 'Invalid credentials'
+                message: 'Invalid email or password'
             });
         }
-
-        // Password check (trimmed comparison to handle DB whitespace)
-        if (admin.password.trim() !== password) {
-            console.log('   ❌ Password mismatch');
-            console.log(`   Expected length: ${admin.password.length}, Got length: ${password.length}`);
-            console.log('──────────────────────────────────');
-            return res.status(401).json({
-                success: false,
-                message: 'Invalid password'
-            });
-        }
-
-        console.log('   ✅ Login successful!');
-        console.log('──────────────────────────────────');
 
         const token = generateToken(admin.admin_id);
 
@@ -84,7 +72,6 @@ exports.loginAdmin = async (req, res) => {
             token,
             admin: {
                 id: admin.admin_id,
-                username: admin.username,
                 email: admin.email
             }
         });
@@ -102,41 +89,37 @@ exports.forgotPassword = async (req, res, next) => {
     try {
         const { email } = req.body;
 
-        if (typeof email !== 'string') {
-            return res.status(400).json({ success: false, message: 'Invalid input' });
+        if (!email || typeof email !== 'string') {
+            return res.status(200).json({ success: true, message: 'If this email is registered, OTP has been sent' });
         }
 
-        const admin = await findAdminByEmail(email);
+        const emailLower = email.trim().toLowerCase();
+        const admin = await findAdminByEmail(emailLower);
+        
+        // Generic response even if not found
         if (!admin) {
-            return res.status(404).json({ success: false, message: 'Admin not found with that email' });
+            return res.status(200).json({ success: true, message: 'If this email is registered, OTP has been sent' });
         }
 
         // Generate 6-digit OTP
         const otp = Math.floor(100000 + Math.random() * 900000).toString();
 
-        // Expiry in 10 minutes
-        const otpExpiry = Date.now() + 10 * 60 * 1000;
-        await updateAdminOtp(email, otp, otpExpiry);
+        // Expiry in 5 minutes (user requested 5m)
+        const otpExpiry = new Date(Date.now() + 5 * 60 * 1000);
+        await updateAdminOtp(emailLower, otp, otpExpiry);
 
-        // Send OTP via email
+        // Send OTP via email using Brevo
         try {
-            await sendEmail(
-                email,
-                "Password Reset OTP",
-                `<h2>Your OTP is: ${otp}</h2><p>This OTP is valid for 10 minutes.</p>`
-            );
+            await sendOtpEmail(emailLower, otp);
         } catch (emailError) {
-            await updateAdminOtp(email, undefined, undefined);
-            return res.status(500).json({ success: false, message: 'Email could not be sent' });
+            console.error("Brevo Email error:", emailError);
+            // We still return success to the UX but log the error
         }
 
-        res.status(200).json({ success: true, message: 'OTP sent to email successfully' });
+        res.status(200).json({ success: true, message: 'If this email is registered, OTP has been sent' });
     } catch (error) {
         console.error(error);
-        res.status(500).json({
-            success: false,
-            error: error.message
-        });
+        res.status(500).json({ success: false, message: 'An error occurred' });
     }
 };
 
@@ -145,60 +128,76 @@ exports.verifyOtp = async (req, res, next) => {
         const { email, otp } = req.body;
 
         if (!email || !otp) {
-            return res.status(400).json({ success: false, message: 'Please provide email and OTP' });
-        }
-
-        if (typeof email !== 'string' || typeof otp !== 'string') {
             return res.status(400).json({ success: false, message: 'Invalid input' });
         }
 
-        const admin = await findAdminByEmail(email);
+        const emailLower = email.trim().toLowerCase();
+        const admin = await findAdminByEmail(emailLower);
 
-        if (!admin) {
+        if (!admin || !admin.otp) {
             return res.status(400).json({ success: false, message: 'Invalid or expired OTP' });
         }
 
-        await updateAdminOtp(email, undefined, undefined);
+        // Check attempts
+        if (admin.otp_attempts >= 5) {
+            return res.status(400).json({ success: false, message: 'Too many attempts. Please request a new OTP.' });
+        }
+
+        // Check expiry
+        if (new Date() > new Date(admin.otp_expiry)) {
+            return res.status(400).json({ success: false, message: 'OTP has expired' });
+        }
+
+        // Verify match
+        if (admin.otp !== otp) {
+            await incrementOtpAttempts(emailLower);
+            return res.status(400).json({ success: false, message: 'Invalid OTP' });
+        }
+
+        // Success - mark as verified
+        await setOtpVerified(emailLower);
 
         res.status(200).json({ success: true, message: 'OTP verified successfully' });
     } catch (error) {
         console.error(error);
-        res.status(500).json({
-            success: false,
-            error: error.message
-        });
+        res.status(500).json({ success: false, message: 'An error occurred' });
     }
 };
 
 exports.resetPassword = async (req, res, next) => {
     try {
-        const { email, newPassword } = req.body;
+        const { email, newPassword, confirmPassword } = req.body;
 
-        if (!email || !newPassword) {
-            return res.status(400).json({ success: false, message: 'Please provide email and new password' });
+        if (!email || !newPassword || !confirmPassword) {
+            return res.status(400).json({ success: false, message: 'All fields are required' });
         }
 
-        if (typeof email !== 'string' || typeof newPassword !== 'string') {
-            return res.status(400).json({ success: false, message: 'Invalid input' });
+        if (newPassword !== confirmPassword) {
+            return res.status(400).json({ success: false, message: 'Passwords do not match' });
         }
 
-        const admin = await findAdminByEmail(email);
-
-        if (!admin) {
-            return res.status(404).json({ success: false, message: 'Admin not found' });
+        if (newPassword.length < 8) {
+            return res.status(400).json({ success: false, message: 'Password must be at least 8 characters' });
         }
 
-        // Note: In a stricter implementation, we'd verify a reset token generated after OTP verification.
-        // Assuming the frontend handles the immediate flow as requested.
-        await updateAdminPassword(email, newPassword);
+        const emailLower = email.trim().toLowerCase();
+        const admin = await findAdminByEmail(emailLower);
 
-        res.status(200).json({ success: true, message: 'Password reset successfully' });
+        if (!admin || admin.is_otp_verified !== 1) {
+            return res.status(403).json({ success: false, message: 'Identity not verified' });
+        }
+
+        // Hash and Update
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        await updateAdminPassword(emailLower, hashedPassword);
+
+        // Clear OTP data
+        await clearOtpData(emailLower);
+
+        res.status(200).json({ success: true, message: 'Password reset successful' });
     } catch (error) {
         console.error(error);
-        res.status(500).json({
-            success: false,
-            error: error.message
-        });
+        res.status(500).json({ success: false, message: 'An error occurred' });
     }
 };
 

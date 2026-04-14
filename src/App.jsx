@@ -20,6 +20,7 @@ import Scholarship from './pages/Scholarship';
 import Anuragha from './pages/Anuragha';
 import Sankalp from './pages/Sankalp';
 import Chaitanya from './pages/Chaitanya';
+import ForgotPassword from './pages/admin/ForgotPassword';
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
         <Route path="placements/process" element={<PlacementProcess />} />
         <Route path="placements/recruiters" element={<Recruiters />} />
         <Route path="admin-login" element={<AdminLogin />} />
+        <Route path="forgot-password" element={<ForgotPassword />} />
         <Route path="admin-dashboard" element={<AdminDashboard />} />
         <Route path="cbs/grievance" element={<Grievance />} />
         <Route path="cbs/mandatory-disclosure-mba" element={<MandatoryDisclosure type="MBA" />} />

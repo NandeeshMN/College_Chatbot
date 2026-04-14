@@ -1,4 +1,5 @@
 const express = require('express');
+const rateLimit = require('express-rate-limit');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
@@ -38,8 +39,15 @@ const upload = multer({
     }
 });
 
+// Rate limiter for OTP requests (3 requests per 10 minutes)
+const otpLimiter = rateLimit({
+    windowMs: 10 * 60 * 1000,
+    max: 3,
+    message: { success: false, message: "Too many OTP requests. Please try again after 10 minutes." }
+});
+
 router.post('/login', loginAdmin);
-router.post('/forgot-password', forgotPassword);
+router.post('/forgot-password', otpLimiter, forgotPassword);
 router.post('/verify-otp', verifyOtp);
 router.post('/reset-password', resetPassword);
 
