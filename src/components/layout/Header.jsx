@@ -141,7 +141,7 @@ const Header = () => {
                             </li>
                         ))}
                     </ul>
-                    <Link to="/admissions" className={styles.enrollButton}>Enroll Now</Link>
+                    <Link to="/#enroll-now" className={styles.enrollButton}>Enroll Now</Link>
                 </nav>
 
                 {/* Mobile Toggle */}
@@ -190,7 +190,7 @@ const Header = () => {
                         </li>
                     ))}
                     <li className={styles.mobileNavItem}>
-                        <Link to="/admissions" className={`${styles.mobileNavLink} ${styles.mobileEnroll}`}>
+                        <Link to="/#enroll-now" className={`${styles.mobileNavLink} ${styles.mobileEnroll}`}>
                             Enroll Now
                         </Link>
                     </li>

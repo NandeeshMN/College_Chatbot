@@ -85,7 +85,7 @@ const EnrollmentForm = () => {
     };
 
     return (
-        <section className={styles.enrollmentSection}>
+        <section id="enroll-now" className={styles.enrollmentSection}>
             {status && (
                 <div className={`${styles.toast} ${styles[status.type]}`}>
                     {status.message}

@@ -15,6 +15,11 @@ import AdminLogin from './pages/admin/AdminLogin';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import Grievance from './pages/Grievance';
 import MandatoryDisclosure from './pages/MandatoryDisclosure';
+import Payments from './pages/Payments';
+import Scholarship from './pages/Scholarship';
+import Anuragha from './pages/Anuragha';
+import Sankalp from './pages/Sankalp';
+import Chaitanya from './pages/Chaitanya';
 
 function App() {
   return (
@@ -35,6 +40,11 @@ function App() {
         <Route path="cbs/grievance" element={<Grievance />} />
         <Route path="cbs/mandatory-disclosure-mba" element={<MandatoryDisclosure type="MBA" />} />
         <Route path="cbs/mandatory-disclosure-mca" element={<MandatoryDisclosure type="MCA" />} />
+        <Route path="cbs/payments" element={<Payments />} />
+        <Route path="cbs/scholarship" element={<Scholarship />} />
+        <Route path="cbs/anuragha" element={<Anuragha />} />
+        <Route path="cbs/sankalp" element={<Sankalp />} />
+        <Route path="cbs/chaitanya" element={<Chaitanya />} />
         {/* Placeholder routes for now */}
         <Route path="*" element={
           <div className="container" style={{ padding: '4rem 0', textAlign: 'center' }}>

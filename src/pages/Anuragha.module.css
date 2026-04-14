@@ -1,0 +1,231 @@
+.pageContainer {
+    padding-top: 100px;
+    background-color: #ffffff;
+}
+
+/* Hero Section */
+.heroSection {
+    background: linear-gradient(rgba(0, 51, 102, 0.6), rgba(0, 51, 102, 0.6)), url('../assets/hero_bg_common.png');
+    background-size: cover;
+    background-position: center;
+    padding: 8rem 0;
+    color: var(--color-white);
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.heroTitle {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: #ffffff;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.breadcrumbs {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    font-size: 1rem;
+    background-color: #0b4c8c;
+    color: white;
+    padding: 10px 30px;
+    border-radius: 50px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: relative;
+    top: calc(8rem + 15px);
+    margin-top: -8rem;
+}
+
+.breadcrumbLink {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.separator {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* Quote Section */
+.quoteSection {
+    margin-top: 6rem;
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    margin-bottom: 60px;
+}
+
+.quoteImageWrapper {
+    flex: 1;
+    max-width: 500px;
+}
+
+.quoteImage {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.quoteTextWrapper {
+    flex: 1;
+}
+
+.kannadaQuote {
+    font-size: 1.8rem;
+    line-height: 1.5;
+    color: #2d3748;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+}
+
+.quoteAuthor {
+    font-size: 1.2rem;
+    color: #4a5568;
+}
+
+.authorTitle {
+    display: block;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    color: #718096;
+    margin-bottom: 4px;
+}
+
+.authorName {
+    font-weight: 700;
+    color: #0b4c8c;
+}
+
+/* Gallery Sections */
+.gallerySection {
+    margin-top: 40px;
+    margin-bottom: 60px;
+}
+
+.sectionTitle {
+    font-size: 24px;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 20px;
+    color: #2d3748;
+}
+
+.galleryGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.imageCard {
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+    border-radius: 8px;
+    height: 220px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.galleryImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.imageCard:hover .galleryImage {
+    transform: scale(1.05);
+}
+
+/* Modal / Lightbox Styles */
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+}
+
+.modalContent {
+    position: relative;
+    max-width: 90%;
+    max-height: 90%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modalImage {
+    max-width: 100%;
+    max-height: 85vh;
+    object-fit: contain;
+    border-radius: 4px;
+}
+
+.closeBtn {
+    position: absolute;
+    top: -40px;
+    right: 0;
+    background: transparent;
+    border: none;
+    color: white;
+    cursor: pointer;
+}
+
+.navBtn {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: white;
+    padding: 1rem;
+    cursor: pointer;
+    border-radius: 50%;
+    z-index: 2100;
+}
+
+.prevBtn { left: 2rem; }
+.nextBtn { right: 2rem; }
+
+.imageCounter {
+    position: absolute;
+    bottom: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .quoteSection {
+        flex-direction: column;
+        text-align: center;
+        gap: 30px;
+    }
+    .quoteImageWrapper {
+        max-width: 100%;
+    }
+    .kannadaQuote {
+        font-size: 1.4rem;
+    }
+}
+
+@media (max-width: 640px) {
+    .heroTitle {
+        font-size: 2.5rem;
+    }
+    .navBtn {
+        padding: 0.5rem;
+    }
+    .prevBtn { left: 0.5rem; }
+    .nextBtn { right: 0.5rem; }
+}

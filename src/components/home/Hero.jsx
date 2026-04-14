@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import styles from './Hero.module.css';
 
@@ -53,7 +54,9 @@ const Hero = () => {
                         <div className={`container ${styles.content}`}>
                             <h1 className={styles.title}>{slide.title}</h1>
                             <p className={styles.subtitle}>{slide.subtitle}</p>
-                            <button className={styles.ctaButton}>{slide.cta}</button>
+                            <Link to="/#enroll-now" className={styles.ctaButton}>
+                                {slide.cta}
+                            </Link>
                         </div>
                     </div>
                 </div>

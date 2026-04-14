@@ -33,7 +33,7 @@ const MandatoryDisclosure = ({ type }) => {
                             {/* MCA Document 1 */}
                             <div className={styles.pdfViewerWrapper}>
                                 <iframe 
-                                    src="/pdfs/Mandatory_Disclosure_MCA.pdf#view=FitH"
+                                    src="https://drive.google.com/file/d/1W2Oy-JbwO6AenOu-aN0oMbob3R1-1j49/preview"
                                     title="Mandatory Disclosure (MCA)"
                                     className={styles.pdfIframe}
                                 ></iframe>
@@ -43,7 +43,7 @@ const MandatoryDisclosure = ({ type }) => {
                             <h2 className={styles.pageTitle} style={{marginTop: '4rem'}}>MCA Affiliation Notification 2024-25</h2>
                             <div className={styles.pdfViewerWrapper}>
                                 <iframe 
-                                    src="/pdfs/MCA-Affiliation-Notification-2024-25-2-1.pdf#view=FitH"
+                                    src="https://drive.google.com/file/d/1nom4DCShD6SpPAORGM1gu-8tCr8x_zWj/preview"
                                     title="MCA Affiliation Notification 2024-25"
                                     className={styles.pdfIframe}
                                 ></iframe>
@@ -53,7 +53,7 @@ const MandatoryDisclosure = ({ type }) => {
                         /* MBA Document */
                         <div className={styles.pdfViewerWrapper}>
                             <iframe 
-                                src="/pdfs/Mandatory_Disclosure_MBA.pdf#view=FitH"
+                                src="https://drive.google.com/file/d/1odEBYeH5tDJa4n5OQQFbYJHyC9f9-D7a/preview"
                                 title="Mandatory Disclosure (MBA)"
                                 className={styles.pdfIframe}
                             ></iframe>
