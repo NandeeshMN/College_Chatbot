@@ -63,10 +63,10 @@ const Header = () => {
                 <div className={`container ${styles.topBarContent}`}>
                     <div className={styles.socials}>
                         <span className={styles.followText}>Follow us:</span>
-                        <a href="#" aria-label="Facebook"><Facebook size={16} /></a>
-                        <a href="#" aria-label="Instagram"><Instagram size={16} /></a>
-                        <a href="#" aria-label="LinkedIn"><Linkedin size={16} /></a>
-                        <a href="#" aria-label="YouTube"><Youtube size={16} /></a>
+                        <a href="https://www.facebook.com/ChetanMbaHubli?mibextid=ZbWKwL" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><Facebook size={16} /></a>
+                        <a href="https://www.instagram.com/chetanbschoolhubballi_?igsh=bmR3ajh1a3lsejZ1" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><Instagram size={16} /></a>
+                        <a href="https://www.linkedin.com/company/chetan-b-school/posts/?feedView=all" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><Linkedin size={16} /></a>
+                        <a href="https://www.youtube.com/@chetanmbahubli" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><Youtube size={16} /></a>
                     </div>
                     <div className={styles.contactInfo}>
                         <a href="tel:+917337879532" className={styles.contactLink}>

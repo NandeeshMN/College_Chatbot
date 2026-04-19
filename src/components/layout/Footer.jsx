@@ -24,10 +24,17 @@ const Footer = () => {
                             <a href="mailto:info@chetanbschool.org">info@chetanbschool.org</a>
                         </li>
                         <li className={styles.contactItem}>
-                            <div className={styles.iconCircle}>
-                                <MapPin size={18} />
-                            </div>
-                            <span>100ft Road Tajanagar Srinagar Near President Hotel Hubballi Karnataka 580-031</span>
+                            <a 
+                                href="https://www.google.com/maps/place/Chetan+Business+School,+Hubli/@15.3879865,75.11363,16z/data=!4m6!3m5!1s0x3bb8d2a7d0000001:0x3d18913a5122f9d4!8m2!3d15.3866516!4d75.1162498!16s%2Fg%2F11b7y9kv3w?entry=ttu&g_ep=EgoyMDI2MDQxNS4wIKXMDSoASAFQAw%3D%3D" 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', color: 'inherit', textDecoration: 'none' }}
+                            >
+                                <div className={styles.iconCircle}>
+                                    <MapPin size={18} />
+                                </div>
+                                <span>100ft Road Tajanagar Srinagar Near President Hotel Hubballi Karnataka 580-031</span>
+                            </a>
                         </li>
                     </ul>
                 </div>
