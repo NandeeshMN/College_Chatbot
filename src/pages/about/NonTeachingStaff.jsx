@@ -1,4 +1,5 @@
 import React from 'react';
+import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 import styles from './NonTeachingStaff.module.css';
 
@@ -50,6 +51,9 @@ const StaffCard = ({ name, designation, image }) => (
 const NonTeachingStaff = () => {
     return (
         <div className={styles.pageContainer}>
+            <Helmet>
+                <title>About Us | Chetan Business School, Hubballi</title>
+            </Helmet>
             {/* Hero Section */}
             <div className={styles.heroSection}>
                 <div className={styles.heroOverlay}></div>

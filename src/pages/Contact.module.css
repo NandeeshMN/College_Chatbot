@@ -70,10 +70,9 @@
     color: var(--color-gray-900);
 }
 
-.gridContainer {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 4rem;
+.centeredInfo {
+    max-width: 800px;
+    margin: 0 auto;
 }
 
 @media (max-width: 992px) {

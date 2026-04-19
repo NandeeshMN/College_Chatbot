@@ -1,4 +1,5 @@
 import React from 'react';
+import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 import styles from './VideoGallery.module.css';
 
@@ -16,6 +17,9 @@ const VideoGallery = () => {
 
     return (
         <div className={styles.pageContainer}>
+            <Helmet>
+                <title>Activities | Chetan Business School, Hubballi</title>
+            </Helmet>
             {/* Hero Section */}
             <div className={styles.heroSection}>
                 <div className="container">

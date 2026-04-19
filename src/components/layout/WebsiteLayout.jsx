@@ -4,7 +4,7 @@ import Header from './Header';
 import Footer from './Footer';
 import Chatbot from './Chatbot';
 
-const Layout = () => {
+const WebsiteLayout = () => {
     return (
         <>
             <Header />
@@ -17,4 +17,4 @@ const Layout = () => {
     );
 };
 
-export default Layout;
+export default WebsiteLayout;

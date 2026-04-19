@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { useNavigate, Link } from 'react-router-dom';
 
 const AdminLogin = () => {
@@ -40,6 +41,9 @@ const AdminLogin = () => {
 
     return (
         <div style={{ padding: '6rem 2rem', minHeight: '80vh', display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: '#f9f9f9' }}>
+            <Helmet>
+                <title>Admin Login | CBS</title>
+            </Helmet>
             <div style={{ backgroundColor: 'white', padding: '3rem', borderRadius: '10px', boxShadow: '0 4px 6px rgba(0,0,0,0.1)', width: '100%', maxWidth: '400px' }}>
                 <h2 style={{ textAlign: 'center', marginBottom: '2rem', color: '#1a365d' }}>Admin Access</h2>
                 {error && <div style={{ backgroundColor: '#fed7d7', color: '#c53030', padding: '0.75rem', borderRadius: '5px', marginBottom: '1rem', fontSize: '0.875rem' }}>{error}</div>}

@@ -15,6 +15,12 @@ const newsletterData = [
         title: "Chaitanya Newsletter - Edition 2",
         subtitle: "Continuing our journey of academic innovation and student success.",
         file: "https://drive.google.com/file/d/1G0bqrS5lW0Gc1TqBS6_jXHpEbX9W61vY/preview"
+    },
+    {
+        edition: "Edition 3",
+        title: "Chaitanya Newsletter - Edition 3",
+        subtitle: "Delivering new insights and updates from the world of business and management.",
+        file: "https://drive.google.com/file/d/1nJ0NdFbL5HHTBWT4TV-lpWxZstP8gTk3/preview"
     }
 ];
 

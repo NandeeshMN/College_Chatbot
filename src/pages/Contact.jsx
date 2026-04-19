@@ -1,4 +1,5 @@
 import React from 'react';
+import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 import { Phone, MapPin } from 'lucide-react';
 import styles from './Contact.module.css';
@@ -6,6 +7,9 @@ import styles from './Contact.module.css';
 const Contact = () => {
     return (
         <div className={styles.pageContainer}>
+            <Helmet>
+                <title>Contact Us | Chetan Business School, Hubballi</title>
+            </Helmet>
             {/* Hero Section */}
             <div className={styles.heroSection}>
                 <div className={styles.heroOverlay}></div>
@@ -22,8 +26,8 @@ const Contact = () => {
             <div className={`container ${styles.contentWrapper}`}>
                 <h2 className={styles.sectionTitle}>Get In Touch <span className={styles.highlight}>With Us</span></h2>
 
-                <div className={styles.gridContainer}>
-                    {/* Left Side - Info */}
+                <div className={styles.centeredInfo}>
+                    {/* Info Column */}
                     <div className={styles.infoColumn}>
                         {/* Phone Card */}
                         <div className={styles.infoCard}>
@@ -81,36 +85,6 @@ const Contact = () => {
                                 </tbody>
                             </table>
                         </div>
-                    </div>
-
-                    {/* Right Side - Form */}
-                    <div className={styles.formColumn}>
-                        <form className={styles.contactForm}>
-                            <div className={styles.formGroup}>
-                                <input type="text" placeholder="Full Name *" className={styles.input} required />
-                            </div>
-                            <div className={styles.formGroup}>
-                                <input type="tel" placeholder="Mobile Number" className={styles.input} />
-                            </div>
-                            <div className={styles.formGroup}>
-                                <input type="email" placeholder="Email Id" className={styles.input} />
-                            </div>
-                            <div className={styles.formGroup}>
-                                <input type="text" placeholder="Subject" className={styles.input} />
-                            </div>
-                            <div className={styles.formGroup}>
-                                <textarea placeholder="Message (Short & Sweet Please)" className={styles.textarea} rows={4}></textarea>
-                            </div>
-
-                            <div className={styles.checkboxGroup}>
-                                <input type="checkbox" id="auth" className={styles.checkbox} />
-                                <label htmlFor="auth" className={styles.checkboxLabel}>
-                                    I hereby authorize Chetan Business School & its representatives to call, sms, e-mail or whatsapp regarding their courses, terms & conditions.
-                                </label>
-                            </div>
-
-                            <button type="submit" className={styles.submitButton}>Submit</button>
-                        </form>
                     </div>
                 </div>
             </div>

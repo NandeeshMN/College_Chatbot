@@ -2,6 +2,7 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 const express = require('express');
+const path = require('path');
 const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
@@ -15,6 +16,7 @@ const rateLimit = require('express-rate-limit');
 // const facultyRoutes = require('./routes/facultyRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const chatbotRoutes = require('./routes/chatbotRoutes');
+const adRoutes = require('./routes/adRoutes');
 const errorHandler = require('./middlewares/errorMiddleware');
 
 console.log('🔑 JWT_SECRET loaded:', process.env.JWT_SECRET ? 'YES' : '❌ MISSING');
@@ -23,6 +25,9 @@ const bcrypt = require('bcrypt');
 
 // Initialize App
 const app = express();
+
+// Set static folder
+app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
 
 // Middleware
 app.use(express.json());
@@ -57,6 +62,7 @@ if (process.env.NODE_ENV === 'development') {
 // app.use('/api/faculty', facultyRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/chatbot', chatbotRoutes);
+app.use('/api/admin/ads', adRoutes);
 
 app.get('/', (req, res) => {
     res.send('API is running...');

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 import { Check, Download } from 'lucide-react';
 import styles from './MCAProgram.module.css';
@@ -6,6 +7,9 @@ import styles from './MCAProgram.module.css';
 const MCAProgram = () => {
     return (
         <div className={styles.pageContainer}>
+            <Helmet>
+                <title>Programs | Chetan Business School, Hubballi</title>
+            </Helmet>
             {/* Hero Section */}
             <div className={styles.heroSection}>
                 <div className={styles.heroOverlay}></div>

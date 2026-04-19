@@ -38,7 +38,7 @@ const Footer = () => {
                     <ul className={styles.linksList}>
                         <li><Link to="/">Home</Link></li>
                         <li><Link to="/about">About Us</Link></li>
-                        <li><Link to="/activities/photos">Photo Gallery</Link></li>
+                        <li><Link to="/activities/photo-gallery">Photo Gallery</Link></li>
                         <li><Link to="/blogs">Blogs</Link></li>
                         <li><Link to="/contact">Contact Us</Link></li>
                     </ul>
@@ -51,7 +51,7 @@ const Footer = () => {
                         <li><Link to="/programs/mca">Masters of Computer Application (MCA)</Link></li>
                         <li><Link to="/programs/mba">Masters of Business Administration (MBA)</Link></li>
                     </ul>
-                    <Link to="/admissions" className={styles.applyButton}>
+                    <Link to="/#enroll-now" className={styles.applyButton}>
                         Apply For Admission
                     </Link>
                 </div>

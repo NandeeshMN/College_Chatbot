@@ -1,4 +1,5 @@
 import React from 'react';
+import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 import styles from './MandatoryDisclosure.module.css';
 
@@ -8,6 +9,9 @@ const MandatoryDisclosure = ({ type }) => {
 
     return (
         <div className={styles.pageContainer}>
+            <Helmet>
+                <title>Mandatory Disclosure | Chetan Business School, Hubballi</title>
+            </Helmet>
             {/* Hero Section */}
             <div className={styles.heroSection}>
                 <div className="container">

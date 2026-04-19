@@ -18,7 +18,7 @@ const fs = require('fs');
 const { processForDB } = require('../utils/chatbotUtils');
 // Optional helper for JWT
 const generateToken = (id) => {
-    return jwt.sign({ id, role: 'admin' }, "my_temp_secret", {
+    return jwt.sign({ id, role: 'admin' }, process.env.JWT_SECRET, {
         expiresIn: '1d',
     });
 };

@@ -58,7 +58,16 @@ const findAdminByUsername = async (username) => {
     return rows[0];
 };
 
+const findAdminById = async (id) => {
+    const [rows] = await pool.execute(
+        'SELECT * FROM admin WHERE admin_id = ?',
+        [id]
+    );
+    return rows[0];
+};
+
 module.exports = {
+    findAdminById,
     findAdminByUsername,
     findAdminByEmail,
     updateAdminOtp,

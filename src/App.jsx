@@ -1,6 +1,7 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-import Layout from './components/layout/Layout';
+import ProtectedRoute from './components/admin/ProtectedRoute';
+import WebsiteLayout from './components/layout/WebsiteLayout';
 import Home from './pages/Home';
 import MBAProgram from './pages/programs/MBAProgram';
 import MCAProgram from './pages/programs/MCAProgram';
@@ -12,7 +13,10 @@ import PhotoGallery from './pages/activities/PhotoGallery';
 import VideoGallery from './pages/activities/VideoGallery';
 import Recruiters from './pages/placements/Recruiters';
 import AdminLogin from './pages/admin/AdminLogin';
-import AdminDashboard from './pages/admin/AdminDashboard';
+import AdminLayout from './pages/admin/AdminLayout';
+import ChatbotManagement from './pages/admin/ChatbotManagement';
+import AdsManagement from './pages/admin/AdsManagement';
+import AdminDashboard from './pages/admin/AdminDashboard'; // Keep for redirect maybe? Or remove later
 import Grievance from './pages/Grievance';
 import MandatoryDisclosure from './pages/MandatoryDisclosure';
 import Payments from './pages/Payments';
@@ -25,7 +29,8 @@ import ForgotPassword from './pages/admin/ForgotPassword';
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<Layout />}>
+      {/* Public Website Routes */}
+      <Route path="/" element={<WebsiteLayout />}>
         <Route index element={<Home />} />
         <Route path="programs/mba" element={<MBAProgram />} />
         <Route path="programs/mca" element={<MCAProgram />} />
@@ -36,9 +41,6 @@ function App() {
         <Route path="contact" element={<Contact />} />
         <Route path="placements/process" element={<PlacementProcess />} />
         <Route path="placements/recruiters" element={<Recruiters />} />
-        <Route path="admin-login" element={<AdminLogin />} />
-        <Route path="forgot-password" element={<ForgotPassword />} />
-        <Route path="admin-dashboard" element={<AdminDashboard />} />
         <Route path="cbs/grievance" element={<Grievance />} />
         <Route path="cbs/mandatory-disclosure-mba" element={<MandatoryDisclosure type="MBA" />} />
         <Route path="cbs/mandatory-disclosure-mca" element={<MandatoryDisclosure type="MCA" />} />
@@ -47,7 +49,8 @@ function App() {
         <Route path="cbs/anuragha" element={<Anuragha />} />
         <Route path="cbs/sankalp" element={<Sankalp />} />
         <Route path="cbs/chaitanya" element={<Chaitanya />} />
-        {/* Placeholder routes for now */}
+        
+        {/* Wildcard for standard pages */}
         <Route path="*" element={
           <div className="container" style={{ padding: '4rem 0', textAlign: 'center' }}>
             <h1>Page Under Construction</h1>
@@ -55,6 +58,19 @@ function App() {
           </div>
         } />
       </Route>
+
+      {/* Admin Dashboard Routes - Isolated from Public UI */}
+      <Route element={<ProtectedRoute />}>
+        <Route path="/admin-dashboard" element={<AdminLayout />}>
+          <Route index element={<ChatbotManagement />} />
+          <Route path="chatbot" element={<ChatbotManagement />} />
+          <Route path="ads" element={<AdsManagement />} />
+        </Route>
+      </Route>
+
+      {/* Standalone Auth Routes */}
+      <Route path="/admin-login" element={<AdminLogin />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
     </Routes>
   );
 }

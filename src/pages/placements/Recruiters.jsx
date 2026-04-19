@@ -1,4 +1,5 @@
 import React from 'react';
+import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 import styles from './Recruiters.module.css';
 
@@ -42,6 +43,9 @@ const recruiters = [
 const Recruiters = () => {
     return (
         <div className={styles.pageContainer}>
+            <Helmet>
+                <title>Placements | Chetan Business School, Hubballi</title>
+            </Helmet>
             {/* Hero Section */}
             <div className={styles.heroSection}>
                 <div className="container">

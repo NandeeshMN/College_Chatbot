@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
+import { X, ChevronLeft, ChevronRight } from 'lucide-react';
 import styles from './PhotoGallery.module.css';
 
 // Awards Images
@@ -55,6 +57,20 @@ import sipMgHectorImg from '../../assets/gallery/sip/mg_hector_visit.png';
 import sipAirportGroupImg from '../../assets/gallery/sip/airport_visit_group.png';
 import sipAirportStudentsImg from '../../assets/gallery/sip/airport_visit_students.png';
 
+// MCA Images
+import mca1 from '../../assets/gallery/MCA/mca1.png';
+import mca2 from '../../assets/gallery/MCA/mca2.png';
+import mca3 from '../../assets/gallery/MCA/mca3.png';
+import mca4 from '../../assets/gallery/MCA/mca4.png';
+import mca5 from '../../assets/gallery/MCA/mca5.png';
+import mca6 from '../../assets/gallery/MCA/mca6.png';
+import mca7 from '../../assets/gallery/MCA/mca7.png';
+import mca8 from '../../assets/gallery/MCA/mca8.png';
+import mca9 from '../../assets/gallery/MCA/mca9.png';
+import mca10 from '../../assets/gallery/MCA/mca10.png';
+import mca11 from '../../assets/gallery/MCA/mca11.png';
+import mca12 from '../../assets/gallery/MCA/mca12.png';
+
 // Placeholder empty array for now as per instructions (will populate later)
 const galleryImages = [
     { id: 2, category: 'Awards', src: rankBadgeImg, alt: '2nd Rank in India Badge' },
@@ -108,6 +124,20 @@ const galleryImages = [
     { id: 36, category: 'SIP', src: sipMgHectorImg, alt: 'Industrial Visit to MG Motors' },
     { id: 37, category: 'SIP', src: sipAirportGroupImg, alt: 'Hubballi Airport Visit - Group' },
     { id: 38, category: 'SIP', src: sipAirportStudentsImg, alt: 'Hubballi Airport Visit - Students' },
+
+    // MCA
+    { id: 39, category: 'MCA', src: mca1, alt: 'MCA Event Photo 1' },
+    { id: 40, category: 'MCA', src: mca2, alt: 'MCA Event Photo 2' },
+    { id: 41, category: 'MCA', src: mca3, alt: 'MCA Event Photo 3' },
+    { id: 42, category: 'MCA', src: mca4, alt: 'MCA Event Photo 4' },
+    { id: 43, category: 'MCA', src: mca5, alt: 'MCA Event Photo 5' },
+    { id: 44, category: 'MCA', src: mca6, alt: 'MCA Event Photo 6' },
+    { id: 45, category: 'MCA', src: mca7, alt: 'MCA Event Photo 7' },
+    { id: 46, category: 'MCA', src: mca8, alt: 'MCA Event Photo 8' },
+    { id: 47, category: 'MCA', src: mca9, alt: 'MCA Event Photo 9' },
+    { id: 48, category: 'MCA', src: mca10, alt: 'MCA Event Photo 10' },
+    { id: 49, category: 'MCA', src: mca11, alt: 'MCA Event Photo 11' },
+    { id: 50, category: 'MCA', src: mca12, alt: 'MCA Event Photo 12' },
 ];
 
 const categories = [
@@ -121,18 +151,55 @@ const categories = [
     'CSR',
     'SIP',
     'Outing',
-    'Job Fair'
+    'Job Fair',
+    'MCA'
 ];
 
 const PhotoGallery = () => {
     const [activeCategory, setActiveCategory] = useState('All');
+    const [selectedIndex, setSelectedIndex] = useState(null);
 
     const filteredImages = activeCategory === 'All'
         ? galleryImages
         : galleryImages.filter(img => img.category === activeCategory);
 
+    // Keyboard support
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            if (selectedIndex === null) return;
+            if (e.key === 'Escape') closeModal();
+            if (e.key === 'ArrowRight') showNext(e);
+            if (e.key === 'ArrowLeft') showPrev(e);
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [selectedIndex, filteredImages]); // Include filteredImages to ensure correct nav context
+
+    const openModal = (index) => {
+        setSelectedIndex(index);
+        document.body.style.overflow = 'hidden'; // Disable scroll
+    };
+
+    const closeModal = () => {
+        setSelectedIndex(null);
+        document.body.style.overflow = 'auto'; // Re-enable scroll
+    };
+
+    const showNext = (e) => {
+        e?.stopPropagation();
+        setSelectedIndex((prev) => (prev + 1) % filteredImages.length);
+    };
+
+    const showPrev = (e) => {
+        e?.stopPropagation();
+        setSelectedIndex((prev) => (prev - 1 + filteredImages.length) % filteredImages.length);
+    };
+
     return (
         <div className={styles.pageContainer}>
+            <Helmet>
+                <title>Activities | Chetan Business School, Hubballi</title>
+            </Helmet>
             {/* Hero Section */}
             <div className={styles.heroSection}>
                 <div className="container">
@@ -164,14 +231,22 @@ const PhotoGallery = () => {
                 {/* Gallery Grid */}
                 <div className={styles.galleryGrid}>
                     {filteredImages.length > 0 ? (
-                        filteredImages.map((image) => (
-                            <div key={image.id} className={styles.imageCard}>
+                        filteredImages.map((image, index) => (
+                            <div 
+                                key={image.id} 
+                                className={styles.imageCard}
+                                onClick={() => openModal(index)}
+                                style={{ cursor: 'pointer' }}
+                            >
                                 <img
                                     src={image.src}
                                     alt={image.alt || 'Gallery Image'}
                                     className={styles.galleryImage}
                                     loading="lazy"
                                 />
+                                <div className={styles.imageOverlay}>
+                                    <span className={styles.viewText}>VIEW IMAGE</span>
+                                </div>
                             </div>
                         ))
                     ) : (
@@ -181,6 +256,41 @@ const PhotoGallery = () => {
                         </div>
                     )}
                 </div>
+
+                {/* Lightbox Modal */}
+                {selectedIndex !== null && (
+                    <div className={styles.modalOverlay} onClick={closeModal}>
+                        <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+                            <button className={styles.closeBtn} onClick={closeModal}>
+                                <X size={32} />
+                            </button>
+                            
+                            <button className={styles.navBtn} style={{ left: '-60px' }} onClick={showPrev}>
+                                <ChevronLeft size={48} />
+                            </button>
+
+                            <img 
+                                src={filteredImages[selectedIndex].src} 
+                                alt={filteredImages[selectedIndex].alt} 
+                                className={styles.modalImage} 
+                            />
+
+                            <button className={styles.navBtn} style={{ right: '-60px' }} onClick={showNext}>
+                                <ChevronRight size={48} />
+                            </button>
+                            
+                            {/* Mobile Nav Overlay (invisible on desktop) */}
+                            <div className={styles.mobileNav}>
+                                <button className={`${styles.navBtn} ${styles.prevBtn}`} onClick={showPrev}>
+                                    <ChevronLeft size={32} />
+                                </button>
+                                <button className={`${styles.navBtn} ${styles.nextBtn}`} onClick={showNext}>
+                                    <ChevronRight size={32} />
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );
