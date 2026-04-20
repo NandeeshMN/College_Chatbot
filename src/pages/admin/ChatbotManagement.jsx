@@ -17,7 +17,7 @@ const ChatbotManagement = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const token = localStorage.getItem('adminToken');
+        const token = sessionStorage.getItem('adminToken');
         if (!token) {
             navigate('/admin-login');
             return;
@@ -26,9 +26,27 @@ const ChatbotManagement = () => {
     }, [navigate]);
 
     const fetchData = async () => {
+        const token = sessionStorage.getItem('adminToken');
+        if (!token) {
+            navigate('/admin-login');
+            return;
+        }
+
         try {
-            const response = await fetch('http://localhost:5000/api/chatbot/all');
+            const response = await fetch('http://localhost:5000/api/chatbot/all', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
             const result = await response.json();
+            
+            if (response.status === 401) {
+                sessionStorage.removeItem('adminToken');
+                sessionStorage.removeItem('adminUser');
+                navigate('/admin-login');
+                return;
+            }
+
             if (result.success) {
                 setData(result.data);
             }
@@ -59,7 +77,7 @@ const ChatbotManagement = () => {
                 method,
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
+                    'Authorization': `Bearer ${sessionStorage.getItem('adminToken')}`
                 },
                 body: JSON.stringify({ question, answer, category })
             });
@@ -100,7 +118,7 @@ const ChatbotManagement = () => {
             const response = await fetch('http://localhost:5000/api/admin/chatbot/upload', {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
+                    'Authorization': `Bearer ${sessionStorage.getItem('adminToken')}`
                 },
                 body: formData
             });
@@ -142,7 +160,7 @@ const ChatbotManagement = () => {
             const response = await fetch(`http://localhost:5000/api/chatbot/delete/${id}`, {
                 method: 'DELETE',
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
+                    'Authorization': `Bearer ${sessionStorage.getItem('adminToken')}`
                 }
             });
 
@@ -160,8 +178,8 @@ const ChatbotManagement = () => {
     };
 
     const handleLogout = () => {
-        localStorage.removeItem('adminToken');
-        localStorage.removeItem('adminUser');
+        sessionStorage.removeItem('adminToken');
+        sessionStorage.removeItem('adminUser');
         navigate('/');
     };
 

@@ -100,9 +100,15 @@ const Header = () => {
                                 onMouseLeave={() => setActiveDropdown(null)}
                             >
                                 <div className={styles.linkWrapper}>
-                                    <Link to={link.path} className={styles.navLink}>
-                                        {link.label}
-                                    </Link>
+                                    {link.path.startsWith('http') ? (
+                                        <a href={link.path} className={styles.navLink} target="_blank" rel="noopener noreferrer">
+                                            {link.label}
+                                        </a>
+                                    ) : (
+                                        <Link to={link.path} className={styles.navLink}>
+                                            {link.label}
+                                        </Link>
+                                    )}
                                     {link.dropdown && <ChevronDown size={14} className={styles.chevron} />}
                                 </div>
 
@@ -130,9 +136,15 @@ const Header = () => {
                                                         </ul>
                                                     </>
                                                 ) : (
+                                                subLink.path.startsWith('http') ? (
+                                                    <a href={subLink.path} className={styles.dropdownLink} target="_blank" rel="noopener noreferrer">
+                                                        {subLink.label}
+                                                    </a>
+                                                ) : (
                                                     <Link to={subLink.path} className={styles.dropdownLink}>
                                                         {subLink.label}
                                                     </Link>
+                                                )
                                                 )}
                                             </li>
                                         ))}
@@ -156,9 +168,15 @@ const Header = () => {
                     {navigationLinks.map((link, index) => (
                         <li key={index} className={styles.mobileNavItem}>
                             <div className={styles.mobileLinkHeader}>
-                                <Link to={link.path} className={styles.mobileNavLink}>
-                                    {link.label}
-                                </Link>
+                                {link.path.startsWith('http') ? (
+                                    <a href={link.path} className={styles.mobileNavLink} target="_blank" rel="noopener noreferrer">
+                                        {link.label}
+                                    </a>
+                                ) : (
+                                    <Link to={link.path} className={styles.mobileNavLink}>
+                                        {link.label}
+                                    </Link>
+                                )}
                                 {link.dropdown && (
                                     <button
                                         className={styles.dropdownToggle}
@@ -180,9 +198,15 @@ const Header = () => {
                                 <ul className={`${styles.mobileDropdown} ${activeDropdown === index ? styles.expand : ''}`}>
                                     {link.dropdown.map((subLink, subIndex) => (
                                         <li key={subIndex}>
-                                            <Link to={subLink.path} className={styles.mobileDropdownLink}>
-                                                {subLink.label}
-                                            </Link>
+                                            {subLink.path.startsWith('http') ? (
+                                                <a href={subLink.path} className={styles.mobileDropdownLink} target="_blank" rel="noopener noreferrer">
+                                                    {subLink.label}
+                                                </a>
+                                            ) : (
+                                                <Link to={subLink.path} className={styles.mobileDropdownLink}>
+                                                    {subLink.label}
+                                                </Link>
+                                            )}
                                         </li>
                                     ))}
                                 </ul>

@@ -13,7 +13,7 @@ const AdminLayout = () => {
     };
 
     useEffect(() => {
-        const token = localStorage.getItem('adminToken');
+        const token = sessionStorage.getItem('adminToken');
         if (!token) {
             navigate('/admin-login', { replace: true });
         }
@@ -21,7 +21,7 @@ const AdminLayout = () => {
         // Prevent back-button caching
         window.history.pushState(null, "", window.location.href);
         window.onpopstate = function () {
-            if (!localStorage.getItem('adminToken')) {
+            if (!sessionStorage.getItem('adminToken')) {
                 window.location.replace("/admin-login");
             } else {
                 window.history.pushState(null, "", window.location.href);

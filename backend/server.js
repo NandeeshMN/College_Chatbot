@@ -63,6 +63,7 @@ if (process.env.NODE_ENV === 'development') {
 app.use('/api/admin', adminRoutes);
 app.use('/api/chatbot', chatbotRoutes);
 app.use('/api/admin/ads', adRoutes);
+app.use('/api/ads', adRoutes);
 
 app.get('/', (req, res) => {
     res.send('API is running...');

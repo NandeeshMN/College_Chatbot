@@ -2,9 +2,10 @@ import React from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 
 const ProtectedRoute = () => {
-    const token = localStorage.getItem('adminToken');
+    const token = sessionStorage.getItem('adminToken');
+    const adminUser = sessionStorage.getItem('adminUser');
 
-    if (!token) {
+    if (!token || !adminUser) {
         // If not authenticated, redirect to login page and replace the history stack
         return <Navigate to="/admin-login" replace />;
     }

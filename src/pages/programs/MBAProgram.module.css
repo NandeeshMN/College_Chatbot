@@ -7,14 +7,18 @@
 /* Hero Section */
 .heroSection {
     background: linear-gradient(rgba(0, 51, 102, 0.6), rgba(0, 51, 102, 0.6)), url('../../assets/hero_bg_common.png');
-    /* You might need to change the image path */
     background-size: cover;
     background-position: center;
-    padding: 8rem 0;
-    /* Increased to match original site look */
+    padding: 180px 0;
     color: var(--color-white);
     text-align: center;
     margin-bottom: 3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 450px;
+    position: relative;
 }
 
 .heroTitle {
@@ -42,9 +46,12 @@
     border-radius: 50px;
     /* Pill shape */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    position: relative;
-    top: 2rem;
-    /* Push it slightly down to overlap or sit at bottom if needed, or just regular margin */
+    position: absolute;
+    bottom: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    white-space: nowrap;
 }
 
 .breadcrumbLink {

@@ -39,18 +39,18 @@ exports.getAllAds = async (req, res) => {
     }
 };
 
-// ➤ GET ACTIVE ADVERTISEMENT FOR HOMEPAGE
+// ➤ GET ACTIVE ADVERTISEMENTS FOR HOMEPAGE
 exports.getActiveAd = async (req, res) => {
     try {
         const [rows] = await pool.execute(
-            'SELECT * FROM advertisements WHERE is_active = 1 ORDER BY display_order ASC LIMIT 1'
+            'SELECT * FROM advertisements WHERE is_active = 1 ORDER BY display_order ASC'
         );
 
         if (rows.length === 0) {
             return res.status(404).json({ success: false, message: 'No active advertisements found' });
         }
 
-        res.json({ success: true, data: rows[0] });
+        res.json({ success: true, data: rows });
     } catch (error) {
         console.error('Error fetching active ad:', error);
         res.status(500).json({ success: false, error: error.message });

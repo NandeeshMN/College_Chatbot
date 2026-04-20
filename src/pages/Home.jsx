@@ -12,25 +12,43 @@ import EnrollmentForm from '../components/home/EnrollmentForm';
 
 const Home = () => {
     const location = useLocation();
-    const [activeAd, setActiveAd] = useState(null);
+    const [ads, setAds] = useState([]);
+    const [index, setIndex] = useState(0);
     const [showAdPopup, setShowAdPopup] = useState(false);
 
     useEffect(() => {
-        const fetchActiveAd = async () => {
+        const fetchActiveAds = async () => {
             try {
                 const response = await fetch('http://localhost:5000/api/admin/ads/active');
                 const result = await response.json();
+                
                 if (result.success && result.data) {
-                    console.log('Active Ad fetched:', result.data);
-                    setActiveAd(result.data);
-                    setShowAdPopup(true);
+                    // Logic to handle both single object (old backend) and array (new backend)
+                    const normalizedAds = Array.isArray(result.data) ? result.data : [result.data];
+                    
+                    if (normalizedAds.length > 0) {
+                        console.log('ADS DATA:', normalizedAds);
+                        setAds(normalizedAds);
+                        setShowAdPopup(true);
+                    }
                 }
             } catch (error) {
-                console.error('Error fetching active ad for popup:', error);
+                console.error('Error fetching active ads for popup:', error);
             }
         };
-        fetchActiveAd();
+        fetchActiveAds();
     }, []);
+
+    // AUTO ROTATION (Based on ads array)
+    useEffect(() => {
+        if (showAdPopup && ads.length > 1) {
+            const interval = setInterval(() => {
+                setIndex((prev) => (prev + 1) % ads.length);
+            }, 4000);
+
+            return () => clearInterval(interval);
+        }
+    }, [ads, showAdPopup]);
 
     useEffect(() => {
         if (location.hash) {
@@ -50,7 +68,7 @@ const Home = () => {
             </Helmet>
 
             {/* ADVERTISEMENT POPUP MODAL */}
-            {showAdPopup && activeAd && (
+            {showAdPopup && ads.length > 0 && ads[index] && (
                 <div style={{
                     position: 'fixed',
                     top: 0, left: 0, width: '100%', height: '100%',
@@ -62,18 +80,19 @@ const Home = () => {
                 }}>
                     <div style={{
                         position: 'relative',
-                        backgroundColor: activeAd.redirect_link ? 'white' : 'transparent',
-                        padding: activeAd.redirect_link ? '0.5rem' : '0',
+                        backgroundColor: ads[index].redirect_link ? 'white' : 'transparent',
+                        padding: ads[index].redirect_link ? '0.5rem' : '0',
                         borderRadius: '12px',
                         width: '95%',
-                        maxWidth: '500px', // slightly tighter for better button proportion
+                        maxWidth: '500px',
                         display: 'flex',
                         flexDirection: 'column',
                         justifyContent: 'center',
                         alignItems: 'center',
-                        boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.3)'
+                        boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.3)',
+                        transition: 'all 0.5s ease'
                     }}>
-                        {/* Always show top-right X button for safety/consistency */}
+                        {/* Always show top-right X button */}
                         <button 
                             onClick={() => setShowAdPopup(false)}
                             style={{
@@ -96,73 +115,104 @@ const Home = () => {
                             <X size={20} color="#1a202c" />
                         </button>
 
-                        {activeAd.redirect_link ? (
-                            <>
+                        <div style={{ width: '100%', position: 'relative' }}>
+                            {ads[index].redirect_link ? (
+                                <a 
+                                    href={ads[index].redirect_link} 
+                                    target="_blank" 
+                                    rel="noopener noreferrer" 
+                                    style={{ display: 'block', width: '100%' }}
+                                >
+                                    <img 
+                                        src={`http://localhost:5000${ads[index].image_url}`} 
+                                        key={ads[index].id}
+                                        alt="Advertisement" 
+                                        style={{ 
+                                            width: '100%', 
+                                            height: 'auto', 
+                                            maxHeight: '70vh', 
+                                            objectFit: 'contain', 
+                                            borderRadius: '8px',
+                                            marginBottom: '0.5rem'
+                                        }}
+                                    />
+                                </a>
+                            ) : (
                                 <img 
-                                    src={`http://localhost:5000${activeAd.image_url}`} 
+                                    src={`http://localhost:5000${ads[index].image_url}`} 
+                                    key={ads[index].id}
                                     alt="Advertisement" 
                                     style={{ 
                                         width: '100%', 
                                         height: 'auto', 
-                                        maxHeight: '70vh', 
+                                        maxHeight: '80vh', 
                                         objectFit: 'contain', 
-                                        borderRadius: '8px',
-                                        marginBottom: '0.5rem'
+                                        borderRadius: '12px'
                                     }}
                                 />
-                                <div style={{ display: 'flex', gap: '0.75rem', width: '100%', padding: '0.5rem' }}>
-                                    <a 
-                                        href={activeAd.redirect_link} 
-                                        target="_blank" 
-                                        rel="noopener noreferrer" 
-                                        style={{ 
-                                            flex: 1, 
-                                            textAlign: 'center', 
-                                            backgroundColor: '#3b82f6', 
-                                            color: 'white', 
-                                            padding: '0.8rem', 
-                                            borderRadius: '8px', 
-                                            fontWeight: 'bold', 
-                                            textDecoration: 'none',
-                                            transition: 'opacity 0.2s ease'
+                            )}
+                        </div>
+
+                        {/* Action buttons only if link exists */}
+                        {ads[index].redirect_link && (
+                            <div style={{ display: 'flex', gap: '0.75rem', width: '100%', padding: '0.5rem' }}>
+                                <a 
+                                    href={ads[index].redirect_link} 
+                                    target="_blank" 
+                                    rel="noopener noreferrer" 
+                                    style={{ 
+                                        flex: 1, 
+                                        textAlign: 'center', 
+                                        backgroundColor: '#3b82f6', 
+                                        color: 'white', 
+                                        padding: '0.8rem', 
+                                        borderRadius: '8px', 
+                                        fontWeight: 'bold', 
+                                        textDecoration: 'none',
+                                        transition: 'opacity 0.2s ease'
+                                    }}
+                                    onMouseEnter={(e) => e.target.style.opacity = 0.9}
+                                    onMouseLeave={(e) => e.target.style.opacity = 1}
+                                >
+                                    Apply Now
+                                </a>
+                                <button 
+                                    onClick={() => setShowAdPopup(false)}
+                                    style={{ 
+                                        flex: 1, 
+                                        backgroundColor: '#ef4444', 
+                                        color: 'white', 
+                                        border: 'none', 
+                                        padding: '0.8rem', 
+                                        borderRadius: '8px', 
+                                        fontWeight: 'bold', 
+                                        cursor: 'pointer',
+                                        transition: 'opacity 0.2s ease'
+                                    }}
+                                    onMouseEnter={(e) => e.target.style.opacity = 0.9}
+                                    onMouseLeave={(e) => e.target.style.opacity = 1}
+                                >
+                                    Close
+                                </button>
+                            </div>
+                        )}
+                        
+                        {/* Indicators dots */}
+                        {ads.length > 1 && (
+                            <div style={{ display: 'flex', gap: '5px', marginTop: '5px', paddingBottom: '10px' }}>
+                                {ads.map((_, idx) => (
+                                    <div 
+                                        key={idx}
+                                        style={{
+                                            width: '8px',
+                                            height: '8px',
+                                            borderRadius: '50%',
+                                            backgroundColor: idx === index ? '#3b82f6' : '#cbd5e0',
+                                            transition: 'background-color 0.3s ease'
                                         }}
-                                        onMouseEnter={(e) => e.target.style.opacity = 0.9}
-                                        onMouseLeave={(e) => e.target.style.opacity = 1}
-                                    >
-                                        Apply Now
-                                    </a>
-                                    <button 
-                                        onClick={() => setShowAdPopup(false)}
-                                        style={{ 
-                                            flex: 1, 
-                                            backgroundColor: '#ef4444', 
-                                            color: 'white', 
-                                            border: 'none', 
-                                            padding: '0.8rem', 
-                                            borderRadius: '8px', 
-                                            fontWeight: 'bold', 
-                                            cursor: 'pointer',
-                                            transition: 'opacity 0.2s ease'
-                                        }}
-                                        onMouseEnter={(e) => e.target.style.opacity = 0.9}
-                                        onMouseLeave={(e) => e.target.style.opacity = 1}
-                                    >
-                                        Close
-                                    </button>
-                                </div>
-                            </>
-                        ) : (
-                            <img 
-                                src={`http://localhost:5000${activeAd.image_url}`} 
-                                alt="Advertisement" 
-                                style={{ 
-                                    width: '100%', 
-                                    height: 'auto', 
-                                    maxHeight: '80vh', 
-                                    objectFit: 'contain', 
-                                    borderRadius: '12px'
-                                }}
-                            />
+                                    />
+                                ))}
+                            </div>
                         )}
                     </div>
                 </div>

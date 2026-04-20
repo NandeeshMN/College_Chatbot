@@ -70,6 +70,15 @@ import mca9 from '../../assets/gallery/MCA/mca9.png';
 import mca10 from '../../assets/gallery/MCA/mca10.png';
 import mca11 from '../../assets/gallery/MCA/mca11.png';
 import mca12 from '../../assets/gallery/MCA/mca12.png';
+import mca13 from '../../assets/gallery/MCA/mca13.png';
+import mca14 from '../../assets/gallery/MCA/mca14.png';
+import mca15 from '../../assets/gallery/MCA/mca15.png';
+import mca16 from '../../assets/gallery/MCA/mca16.png';
+import mca17 from '../../assets/gallery/MCA/mca17.png';
+import mca18 from '../../assets/gallery/MCA/mca18.png';
+import mca19 from '../../assets/gallery/MCA/mca19.png';
+import mca20 from '../../assets/gallery/MCA/mca20.png';
+import mca21 from '../../assets/gallery/MCA/mca21.png';
 
 // Placeholder empty array for now as per instructions (will populate later)
 const galleryImages = [
@@ -138,6 +147,15 @@ const galleryImages = [
     { id: 48, category: 'MCA', src: mca10, alt: 'MCA Event Photo 10' },
     { id: 49, category: 'MCA', src: mca11, alt: 'MCA Event Photo 11' },
     { id: 50, category: 'MCA', src: mca12, alt: 'MCA Event Photo 12' },
+    { id: 51, category: 'MCA', src: mca13, alt: 'MCA Event Photo 13' },
+    { id: 52, category: 'MCA', src: mca14, alt: 'MCA Event Photo 14' },
+    { id: 53, category: 'MCA', src: mca15, alt: 'MCA Event Photo 15' },
+    { id: 54, category: 'MCA', src: mca16, alt: 'MCA Event Photo 16' },
+    { id: 55, category: 'MCA', src: mca17, alt: 'MCA Event Photo 17' },
+    { id: 56, category: 'MCA', src: mca18, alt: 'MCA Event Photo 18' },
+    { id: 57, category: 'MCA', src: mca19, alt: 'MCA Event Photo 19' },
+    { id: 58, category: 'MCA', src: mca20, alt: 'MCA Event Photo 20' },
+    { id: 59, category: 'MCA', src: mca21, alt: 'MCA Event Photo 21' },
 ];
 
 const categories = [

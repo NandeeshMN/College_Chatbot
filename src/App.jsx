@@ -11,6 +11,8 @@ import TeachingStaff from './pages/about/TeachingStaff';
 import NonTeachingStaff from './pages/about/NonTeachingStaff';
 import PhotoGallery from './pages/activities/PhotoGallery';
 import VideoGallery from './pages/activities/VideoGallery';
+import Blogs from './pages/activities/Blogs';
+import BlogDetail from './pages/activities/BlogDetail';
 import Recruiters from './pages/placements/Recruiters';
 import AdminLogin from './pages/admin/AdminLogin';
 import AdminLayout from './pages/admin/AdminLayout';
@@ -24,6 +26,7 @@ import Scholarship from './pages/Scholarship';
 import Anuragha from './pages/Anuragha';
 import Sankalp from './pages/Sankalp';
 import Chaitanya from './pages/Chaitanya';
+import Brochure from './pages/Brochure';
 import ForgotPassword from './pages/admin/ForgotPassword';
 
 function App() {
@@ -38,9 +41,12 @@ function App() {
         <Route path="about/faculty/non-teaching" element={<NonTeachingStaff />} />
         <Route path="activities/photo-gallery" element={<PhotoGallery />} />
         <Route path="activities/videos" element={<VideoGallery />} />
+        <Route path="blogs" element={<Blogs />} />
+        <Route path="blog/:id" element={<BlogDetail />} />
         <Route path="contact" element={<Contact />} />
         <Route path="placements/process" element={<PlacementProcess />} />
         <Route path="placements/recruiters" element={<Recruiters />} />
+        <Route path="placements/brochure-2024" element={<Brochure />} />
         <Route path="cbs/grievance" element={<Grievance />} />
         <Route path="cbs/mandatory-disclosure-mba" element={<MandatoryDisclosure type="MBA" />} />
         <Route path="cbs/mandatory-disclosure-mca" element={<MandatoryDisclosure type="MCA" />} />

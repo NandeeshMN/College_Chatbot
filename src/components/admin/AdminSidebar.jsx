@@ -6,8 +6,8 @@ const AdminSidebar = ({ isOpen, setIsOpen }) => {
     const navigate = useNavigate();
 
     const handleLogout = () => {
-        localStorage.removeItem('adminToken');
-        localStorage.removeItem('adminUser');
+        sessionStorage.removeItem('adminToken');
+        sessionStorage.removeItem('adminUser');
         navigate('/', { replace: true });
     };
 

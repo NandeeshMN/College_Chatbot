@@ -17,7 +17,7 @@ const AdminDashboard = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const token = localStorage.getItem('adminToken');
+        const token = sessionStorage.getItem('adminToken');
         if (!token) {
             navigate('/admin-login');
             return;
@@ -59,7 +59,7 @@ const AdminDashboard = () => {
                 method,
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
+                    'Authorization': `Bearer ${sessionStorage.getItem('adminToken')}`
                 },
                 body: JSON.stringify({ question, answer, category })
             });
@@ -100,7 +100,7 @@ const AdminDashboard = () => {
             const response = await fetch('http://localhost:5000/api/admin/chatbot/upload', {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
+                    'Authorization': `Bearer ${sessionStorage.getItem('adminToken')}`
                 },
                 body: formData
             });
@@ -142,7 +142,7 @@ const AdminDashboard = () => {
             const response = await fetch(`http://localhost:5000/api/chatbot/delete/${id}`, {
                 method: 'DELETE',
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
+                    'Authorization': `Bearer ${sessionStorage.getItem('adminToken')}`
                 }
             });
 
@@ -160,8 +160,8 @@ const AdminDashboard = () => {
     };
 
     const handleLogout = () => {
-        localStorage.removeItem('adminToken');
-        localStorage.removeItem('adminUser');
+        sessionStorage.removeItem('adminToken');
+        sessionStorage.removeItem('adminUser');
         navigate('/');
     };
 

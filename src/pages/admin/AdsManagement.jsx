@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Plus, Edit, Trash2, ExternalLink, Power, PowerOff } from 'lucide-react';
 
 const AdsManagement = () => {
+    console.log("ADS PAGE RENDERED");
+    const navigate = useNavigate();
     const [ads, setAds] = useState([]);
     const [formData, setFormData] = useState({
         redirect_link: '',
@@ -25,13 +28,27 @@ const AdsManagement = () => {
     }, []);
 
     const fetchAds = async () => {
+        const token = sessionStorage.getItem('adminToken');
+        if (!token) {
+            navigate('/admin-login');
+            return;
+        }
+
         try {
             const response = await fetch(`${API_BASE_URL}/all`, {
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
+                    'Authorization': `Bearer ${token}`
                 }
             });
             const result = await response.json();
+
+            if (response.status === 401) {
+                sessionStorage.removeItem('adminToken');
+                sessionStorage.removeItem('adminUser');
+                navigate('/admin-login');
+                return;
+            }
+
             if (result.success) {
                 setAds(result.data);
             }
@@ -74,7 +91,7 @@ const AdsManagement = () => {
             const response = await fetch(url, {
                 method,
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
+                    'Authorization': `Bearer ${sessionStorage.getItem('adminToken')}`
                 },
                 body: data
             });
@@ -132,7 +149,7 @@ const AdsManagement = () => {
             const response = await fetch(`${API_BASE_URL}/delete/${adToDelete}`, {
                 method: 'DELETE',
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
+                    'Authorization': `Bearer ${sessionStorage.getItem('adminToken')}`
                 }
             });
             const result = await response.json();
@@ -153,7 +170,7 @@ const AdsManagement = () => {
             const response = await fetch(`${API_BASE_URL}/toggle/${id}`, {
                 method: 'PATCH',
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
+                    'Authorization': `Bearer ${sessionStorage.getItem('adminToken')}`
                 }
             });
             const result = await response.json();

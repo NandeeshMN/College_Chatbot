@@ -8,10 +8,12 @@ const {
     getChatbotResponse
 } = require('../controllers/chatbotController');
 
-router.post('/add', addData);
-router.get('/all', getAllData);
-router.put('/update/:id', updateData);
-router.delete('/delete/:id', deleteData);
+const { adminProtected } = require('../middlewares/adminAuthMiddleware');
+
+router.post('/add', adminProtected, addData);
+router.get('/all', adminProtected, getAllData);
+router.put('/update/:id', adminProtected, updateData);
+router.delete('/delete/:id', adminProtected, deleteData);
 router.post('/ask', getChatbotResponse);
 
 module.exports = router;
