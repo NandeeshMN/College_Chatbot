@@ -224,7 +224,9 @@ const Home = () => {
             <Courses />
             <Features />
             <Testimonials />
-            <EnrollmentForm />
+            <section id="enquiry-form">
+                <EnrollmentForm />
+            </section>
         </div>
     );
 };

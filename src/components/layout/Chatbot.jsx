@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { MessageCircle, X, Send } from 'lucide-react';
+import { MessageCircle, X, Send, Mic, Settings, Sparkles } from 'lucide-react';
 import styles from './Chatbot.module.css';
 import { Link } from 'react-router-dom';
 
@@ -11,6 +11,11 @@ const Chatbot = () => {
     const [isTyping, setIsTyping] = useState(false);
     const [showWelcomeBubble, setShowWelcomeBubble] = useState(false);
     const [hasInteracted, setHasInteracted] = useState(false);
+    const [isListening, setIsListening] = useState(false);
+    const [isAnimationEnabled, setIsAnimationEnabled] = useState(() => {
+        const saved = localStorage.getItem('chatbotAnimationEnabled');
+        return saved !== null ? JSON.parse(saved) : true;
+    });
     const messagesEndRef = useRef(null);
 
     // Auto-scroll to latest message
@@ -59,15 +64,70 @@ const Chatbot = () => {
         }
     };
 
+    const toggleAnimation = () => {
+        const newValue = !isAnimationEnabled;
+        setIsAnimationEnabled(newValue);
+        localStorage.setItem('chatbotAnimationEnabled', JSON.stringify(newValue));
+    };
+
+    const handleVoiceInput = () => {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (!SpeechRecognition) {
+            alert("Your browser does not support voice input. Please try Chrome or Edge.");
+            return;
+        }
+
+        const recognition = new SpeechRecognition();
+        recognition.lang = 'en-IN';
+        recognition.interimResults = false;
+
+        recognition.onstart = () => {
+            setIsListening(true);
+        };
+
+        recognition.onend = () => {
+            setIsListening(false);
+        };
+
+        recognition.onresult = (event) => {
+            const transcript = event.results[0][0].transcript;
+            setUserInput(transcript);
+            sendMessage(transcript);
+        };
+
+        recognition.onerror = (event) => {
+            console.error("Speech recognition error:", event.error);
+            setIsListening(false);
+        };
+
+        recognition.start();
+    };
+
     const options = [
-        { label: 'Admissions Info', value: 'admissions' },
-        { label: 'Courses Offered', value: 'courses' },
-        { label: 'Fee Structure', value: 'fees' },
-        { label: 'Placements', value: 'placements' },
-        { label: 'Contact Us', value: 'contact' },
+        { label: 'Admissions Info', type: 'quick_reply', value: 'ADMISSION' },
+        { label: 'Courses Offered', type: 'quick_reply', value: 'COURSES' },
+        { label: 'Fee Structure', type: 'quick_reply', value: 'FEES' },
+        { label: 'Placements', type: 'navigate', url: '/placements/process' },
+        { label: 'Contact Us', type: 'navigate', url: '/contact' },
+        { label: 'Chat with Human', type: 'navigate', url: '#enquiry-form' },
     ];
 
-    const sendMessage = async (text) => {
+    const sendMessage = async (payload) => {
+        let text = "";
+        let requestBody = {};
+
+        if (typeof payload === 'string') {
+            text = payload;
+            requestBody = { message: text };
+        } else if (payload.type === 'quick_reply') {
+            text = payload.displayText || payload.action;
+            requestBody = {
+                type: 'quick_reply',
+                action: payload.action,
+                message: text
+            };
+        }
+
         if (!text.trim()) return;
 
         setMessages(prev => [...prev, { type: 'user', text }]);
@@ -79,7 +139,7 @@ const Chatbot = () => {
             const response = await fetch('http://localhost:5000/api/chatbot/ask', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: text })
+                body: JSON.stringify(requestBody)
             });
             const data = await response.json();
 
@@ -98,7 +158,24 @@ const Chatbot = () => {
     };
 
     const handleOptionClick = (option) => {
-        sendMessage(option.label);
+        if (option.type === 'navigate') {
+            if (option.url.startsWith('#')) {
+                const el = document.querySelector(option.url);
+                if (el) {
+                    el.scrollIntoView({ behavior: 'smooth' });
+                    setIsOpen(false);
+                }
+            } else {
+                window.location.href = option.url;
+            }
+            return;
+        }
+
+        sendMessage({ 
+            type: 'quick_reply', 
+            action: option.value, 
+            displayText: option.label 
+        });
     };
 
     const handleKeyPress = (e) => {
@@ -149,17 +226,41 @@ const Chatbot = () => {
                             <span className={styles.onlineStatus}>● Online</span>
                         </div>
                     </div>
-                    <button onClick={toggleChat} className={styles.closeBtn}>
-                        <X size={18} />
-                    </button>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <button 
+                            className={`${styles.settingsBtn} ${isAnimationEnabled ? styles.active : ''}`} 
+                            onClick={toggleAnimation}
+                            title={isAnimationEnabled ? "Disable Floating Animation" : "Enable Floating Animation"}
+                        >
+                            <Sparkles size={18} />
+                        </button>
+                        <button onClick={toggleChat} className={styles.closeBtn}>
+                            <X size={18} />
+                        </button>
+                    </div>
                 </div>
 
                 <div className={styles.messages}>
-                    {messages.map((msg, index) => (
-                        <div key={index} className={`${styles.message} ${styles[msg.type]}`}>
-                            {msg.text}
-                        </div>
-                    ))}
+                    {messages.map((msg, index) => {
+                        // Helper to format text with bullets and line breaks
+                        const formatResponse = (text) => {
+                            if (!text) return "";
+                            return text
+                                .replace(/([•●])/g, '\n$1') // New line before bullets
+                                .replace(/(\d+\.)\s/g, '\n$1 ') // New line before numbered lists
+                                .replace(/(\n\s*){3,}/g, '\n\n') // Max 2 newlines
+                                .trim();
+                        };
+
+                        return (
+                            <div 
+                                key={index} 
+                                className={`${styles.message} ${styles[msg.type]} ${isAnimationEnabled ? styles.floatingMessage : ''}`}
+                            >
+                                {msg.type === 'bot' ? formatResponse(msg.text) : msg.text}
+                            </div>
+                        );
+                    })}
 
                     {/* Typing Indicator */}
                     {isTyping && (
@@ -181,24 +282,29 @@ const Chatbot = () => {
                                     {opt.label}
                                 </button>
                             ))}
-                            <Link to="/contact" className={styles.optionBtn} onClick={() => setIsOpen(false)}>
-                                Chat with Human
-                            </Link>
                         </div>
                     )}
                     <div ref={messagesEndRef} />
                 </div>
 
                 <div className={styles.footer}>
+                    <button 
+                        className={`${styles.micBtn} ${isListening ? styles.activeMic : ''}`}
+                        onClick={handleVoiceInput}
+                        title="Voice Input"
+                    >
+                        <Mic size={18} />
+                    </button>
                     <input
                         type="text"
-                        placeholder="Type a message..."
+                        placeholder={isListening ? "Listening..." : "Type a message..."}
                         className={styles.input}
                         value={userInput}
                         onChange={(e) => setUserInput(e.target.value)}
                         onKeyDown={handleKeyPress}
+                        disabled={isListening}
                     />
-                    <button className={styles.sendBtn} onClick={() => sendMessage(userInput)}>
+                    <button className={styles.sendBtn} onClick={() => sendMessage(userInput)} disabled={isListening}>
                         <Send size={18} />
                     </button>
                 </div>
