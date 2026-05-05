@@ -158,6 +158,25 @@ exports.getChatbotResponse = async (req, res) => {
     console.log('🎯 Detected Intent:', detectedIntent);
     console.log('📦 Detected Entity:', entity);
 
+    const fallbackMessage = `I couldn’t find an exact match for your query.
+
+Here are some things I can help you with:
+• Admissions Information  
+• Courses Offered  
+• Fee Structure  
+• Placement Details  
+• Contact Information  
+
+👉 You can also fill out the enquiry form on our website, and our team will get in touch with you shortly.`;
+
+    const suggestions = [
+        "Admissions Info",
+        "Courses Offered",
+        "Fee Structure",
+        "Placements",
+        "Contact Us"
+    ];
+
     // 3. Structured Matching logic with Controlled Fallback
     if (detectedIntent) {
         response = await getStructuredResponse(pool, detectedIntent, entity, message);
@@ -167,7 +186,7 @@ exports.getChatbotResponse = async (req, res) => {
             console.log('✅ Structured Match Found');
         } else {
             // Controlled fallback if intent is detected but no response found in matrix
-            response = "Sorry, I don't have that specific information. Please try another query.";
+            response = fallbackMessage;
             systemUsed = 'structured-fallback';
             console.log('⚠️ Intent detected but no structured response. Using controlled fallback.');
         }
@@ -210,7 +229,7 @@ exports.getChatbotResponse = async (req, res) => {
 
     // 5. Final Fallback & Unanswered Query Logging
     if (!response) {
-        response = "I didn’t understand. Please ask about Admissions, Fees, Courses, or Placements.";
+        response = fallbackMessage;
         systemUsed = 'fallback';
         console.log('❌ No match found. Logging to unanswered_queries.');
         
@@ -234,7 +253,8 @@ exports.getChatbotResponse = async (req, res) => {
       response,
       intent: detectedIntent,
       entity: entity,
-      system: systemUsed
+      system: systemUsed,
+      suggestions: systemUsed.includes('fallback') ? suggestions : []
     });
 
   } catch (error) {

@@ -224,13 +224,31 @@ const preprocessInput = (text) => {
     if (!text) return '';
     let processed = normalizeInput(text);
     
-    // Remove noise words
-    const noiseWords = ["can you", "please", "i want", "tell me", "what about", "is there", "give me"];
+    // Remove common conversational noise phrases
+    const noiseWords = [
+        "can i get",
+        "please",
+        "information about",
+        "details about",
+        "tell me",
+        "i want to know",
+        "can you tell me",
+        "do you know",
+        "can you",
+        "i want",
+        "what about",
+        "is there",
+        "give me",
+        "about",
+        "the"
+    ];
+
     noiseWords.forEach(word => {
-        processed = processed.replace(new RegExp(word, 'g'), '');
+        // Use word boundary to avoid matching parts of larger words
+        processed = processed.replace(new RegExp(`\\b${word}\\b`, 'g'), '');
     });
     
-    return processed.trim();
+    return processed.trim().replace(/\s+/g, " ");
 };
 
 /**
