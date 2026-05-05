@@ -13,6 +13,7 @@ const EnrollmentForm = () => {
     });
     const [status, setStatus] = useState(null);
     const [toastTimer, setToastTimer] = useState(null);
+    const [errors, setErrors] = useState({});
 
     const showToast = (type, message) => {
         setStatus({ type, message });
@@ -23,6 +24,11 @@ const EnrollmentForm = () => {
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
+
+        // Clear error when user starts typing or checking
+        if (errors[name]) {
+            setErrors(prev => ({ ...prev, [name]: null }));
+        }
 
         if (name === 'mobile') {
             const numericValue = value.replace(/\D/g, '');
@@ -41,9 +47,25 @@ const EnrollmentForm = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         
-        // Basic frontend validation
-        if (!formData.name || !formData.email || !formData.mobile || !formData.course || !formData.agree) {
-            showToast('error', 'Please fill all required fields and agree to the terms.');
+        const newErrors = {};
+
+        // Strict Validation
+        if (!formData.message.trim()) {
+            newErrors.message = 'Please enter your message';
+            showToast('error', 'Please enter your message');
+        } else if (!formData.agree) {
+            newErrors.agree = 'Please accept before submitting';
+            showToast('error', 'Please accept before submitting');
+        }
+
+        if (Object.keys(newErrors).length > 0) {
+            setErrors(newErrors);
+            return;
+        }
+
+        // Existing field validation
+        if (!formData.name || !formData.email || !formData.mobile || !formData.course) {
+            showToast('error', 'Please fill all required fields.');
             return;
         }
 
@@ -77,6 +99,7 @@ const EnrollmentForm = () => {
             // Success handling
             showToast('success', 'Form submitted successfully!');
             setFormData({ name: '', email: '', mobile: '', course: '', message: '', agree: false });
+            setErrors({});
         }).catch((err) => {
             // Error handling
             console.error('Failed to send email:', err);
@@ -100,7 +123,7 @@ const EnrollmentForm = () => {
             
             <div className={styles.formContainerBg}>
                 <div className={`container ${styles.formContainer}`}>
-                    <form className={styles.form} onSubmit={handleSubmit}>
+                    <form className={styles.form} onSubmit={handleSubmit} noValidate>
                         <div className={styles.inputGrid}>
                             <div className={styles.formGroup}>
                                 <input
@@ -161,27 +184,32 @@ const EnrollmentForm = () => {
                             <div className={styles.formGroupFull}>
                                 <textarea
                                     name="message"
-                                    placeholder="Message Short & Sweet Please"
+                                    placeholder="Message Short & Sweet Please *"
                                     value={formData.message}
                                     onChange={handleChange}
-                                    className={styles.textArea}
+                                    className={`${styles.textArea} ${errors.message ? styles.errorField : ''}`}
                                     rows="4"
+                                    required
                                 />
+                                {errors.message && <span className={styles.errorText}>{errors.message}</span>}
                             </div>
 
                             <div className={styles.checkboxGroup}>
-                                <input
-                                    type="checkbox"
-                                    id="agree"
-                                    name="agree"
-                                    checked={formData.agree}
-                                    onChange={handleChange}
-                                    className={styles.checkbox}
-                                    required
-                                />
-                                <label htmlFor="agree" className={styles.checkboxLabel}>
-                                    * I hereby authorize Chetan Business School & its representatives to call, sms, e-mail or whatsapp regarding their courses, terms & conditions.
-                                </label>
+                                <div className={`${styles.checkboxWrapper} ${errors.agree ? styles.errorOutline : ''}`}>
+                                    <input
+                                        type="checkbox"
+                                        id="agree"
+                                        name="agree"
+                                        checked={formData.agree}
+                                        onChange={handleChange}
+                                        className={styles.checkbox}
+                                        required
+                                    />
+                                    <label htmlFor="agree" className={styles.checkboxLabel}>
+                                        * I hereby authorize Chetan Business School & its representatives to call, sms, e-mail or whatsapp regarding their courses, terms & conditions.
+                                    </label>
+                                </div>
+                                {errors.agree && <span className={styles.errorText}>{errors.agree}</span>}
                             </div>
 
                             <div className={styles.submitGroup}>
