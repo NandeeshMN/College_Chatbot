@@ -10,6 +10,8 @@ const ChatbotManagement = () => {
     const [loading, setLoading] = useState(false);
     const [excelFile, setExcelFile] = useState(null);
     const [uploading, setUploading] = useState(false);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [idToDelete, setIdToDelete] = useState(null);
     
     // ➤ NEW TOAST STATE
     const [toast, setToast] = useState({ show: false, text: '', type: '' });
@@ -153,11 +155,16 @@ const ChatbotManagement = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
-    const handleDelete = async (id) => {
-        if (!window.confirm('Are you sure you want to delete this specific question?')) return;
+    const handleDelete = (id) => {
+        setIdToDelete(id);
+        setShowDeleteModal(true);
+    };
+
+    const confirmDelete = async () => {
+        if (!idToDelete) return;
 
         try {
-            const response = await fetch(`http://localhost:5000/api/chatbot/delete/${id}`, {
+            const response = await fetch(`http://localhost:5000/api/chatbot/delete/${idToDelete}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${sessionStorage.getItem('adminToken')}`
@@ -174,6 +181,9 @@ const ChatbotManagement = () => {
             }
         } catch (error) {
             showToast('Server error occurred', 'error');
+        } finally {
+            setShowDeleteModal(false);
+            setIdToDelete(null);
         }
     };
 
@@ -372,6 +382,43 @@ const ChatbotManagement = () => {
                     </div>
                 </div>
             </div>
+
+            {/* Custom Delete Confirmation Modal */}
+            {showDeleteModal && (
+                <div style={{
+                    position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+                    backgroundColor: 'rgba(0, 0, 0, 0.6)', zIndex: 10000,
+                    display: 'flex', justifyContent: 'center', alignItems: 'center',
+                    backdropFilter: 'blur(4px)'
+                }}>
+                    <div style={{
+                        backgroundColor: 'white', padding: '2rem', borderRadius: '12px',
+                        width: '90%', maxWidth: '400px', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.2)',
+                        textAlign: 'center'
+                    }}>
+                        <h3 style={{ marginTop: 0, color: '#e53e3e', fontSize: '1.25rem', marginBottom: '1rem' }}>Delete Question</h3>
+                        <p style={{ color: '#4a5568', marginBottom: '2rem' }}>Are you sure you want to delete this specific question? This action cannot be undone.</p>
+                        <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem' }}>
+                            <button 
+                                onClick={() => { setShowDeleteModal(false); setIdToDelete(null); }}
+                                style={{ padding: '0.6rem 1.5rem', border: '1px solid #cbd5e0', backgroundColor: 'transparent', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold', color: '#4a5568', transition: 'background-color 0.2s' }}
+                                onMouseEnter={(e) => e.target.style.backgroundColor = '#f7fafc'}
+                                onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
+                            >
+                                Cancel
+                            </button>
+                            <button 
+                                onClick={confirmDelete}
+                                style={{ padding: '0.6rem 1.5rem', border: 'none', backgroundColor: '#e53e3e', color: 'white', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold', transition: 'background-color 0.2s' }}
+                                onMouseEnter={(e) => e.target.style.backgroundColor = '#c53030'}
+                                onMouseLeave={(e) => e.target.style.backgroundColor = '#e53e3e'}
+                            >
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
