@@ -126,6 +126,18 @@ exports.getChatbotResponse = async (req, res) => {
 
     // 2. Structured Matching (New Intent + Entity System)
     const cleanText = preprocessInput(cleanedInput);
+
+    // ➤ 2.1 Gratitude Handling (Bypass NLP for "Thank you" messages)
+    const gratitudeWords = ["thank you", "thanks", "thank u", "thx"];
+    if (gratitudeWords.some(word => cleanText.toLowerCase() === word)) {
+        console.log('🌸 Gratitude Detected');
+        return res.json({
+            success: true,
+            response: "You’re welcome! 😊\n\nI’m happy to assist you.\n\nIf you have any more questions about admissions, courses, fees, or placements, feel free to ask anytime.\n\n📌 You can also fill out the enquiry form on our website, and our team will contact you shortly.",
+            system: 'gratitude'
+        });
+    }
+
     const detectedIntent = await detectIntent(pool, cleanText);
     const detectedEntityRaw = await detectEntity(pool, cleanText);
     
