@@ -5,12 +5,19 @@ import { Search, ChevronRight } from 'lucide-react';
 import styles from './BlogDetail.module.css';
 import { blogData } from '../../data/blogs';
 
+import PageBanner from '../../components/common/PageBanner';
+
 const BlogDetail = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const [searchQuery, setSearchQuery] = useState('');
     
     const blog = blogData.find(b => b.id === parseInt(id));
+
+    const breadcrumbs = [
+        { label: 'Blogs', url: '/blogs' },
+        { label: blog ? blog.title : 'Detail' }
+    ];
 
     // Get 5 recent/other blogs for sidebar
     const otherBlogs = blogData.filter(b => b.id !== parseInt(id)).slice(0, 5);
@@ -22,8 +29,6 @@ const BlogDetail = () => {
 
     const handleSearch = (e) => {
         e.preventDefault();
-        // Simple search logic - could be expanded
-        console.log('Searching for:', searchQuery);
     };
 
     if (!blog) {
@@ -43,17 +48,11 @@ const BlogDetail = () => {
                 <meta name="description" content={blog.shortDescription} />
             </Helmet>
 
-            {/* Hero Section */}
-            <div className={styles.heroSection}>
-                <div className="container">
-                    <h1 className={styles.heroTitle}>{blog.title}</h1>
-                    <div className={styles.breadcrumbPill}>
-                        <Link to="/" className={styles.breadcrumbLink}>Home</Link>
-                        <span className={styles.separator}>|</span>
-                        <span className={styles.activeBreadcrumb}>{blog.title}</span>
-                    </div>
-                </div>
-            </div>
+            <PageBanner 
+                title={blog.title}
+                breadcrumbs={breadcrumbs}
+                subtitle="Diving deeper into institutional insights and academic discourse."
+            />
 
             <div className="container">
                 <div className={styles.mainContainer}>

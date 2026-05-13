@@ -2,6 +2,7 @@ import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 import styles from './TeachingStaff.module.css';
+import PageBanner from '../../components/common/PageBanner';
 
 // Management Images
 import presidentImg from '../../assets/management/president.png';
@@ -73,18 +74,11 @@ const TeachingStaff = () => {
             <Helmet>
                 <title>About Us | Chetan Business School, Hubballi</title>
             </Helmet>
-            {/* Hero Section */}
-            <div className={styles.heroSection}>
-                <div className={styles.heroOverlay}></div>
-                <div className="container">
-                    <h1 className={styles.heroTitle}>Teaching Staff</h1>
-                    <div className={styles.breadcrumbs}>
-                        <Link to="/" className={styles.breadcrumbLink}>Home</Link>
-                        <span className={styles.separator}>|</span>
-                        <span>Teaching Staff</span>
-                    </div>
-                </div>
-            </div>
+            <PageBanner 
+                title="Teaching Staff"
+                breadcrumbs={[{ label: 'About Us' }, { label: 'Teaching Staff' }]}
+                subtitle="Meet the dedicated educators and visionary leaders shaping the future of our students."
+            />
 
             <div className="container">
                 {/* Management Section */}

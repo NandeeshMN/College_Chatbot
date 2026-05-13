@@ -4,20 +4,16 @@ import styles from './Scholarship.module.css';
 import scholarshipImg1 from '../assets/images/scholarship.png';
 import scholarshipImg2 from '../assets/images/scholarship1.png';
 
+import PageBanner from '../components/common/PageBanner';
+
 const Scholarship = () => {
     return (
         <div className={styles.pageContainer}>
-            {/* Hero Section */}
-            <div className={styles.heroSection}>
-                <div className="container">
-                    <h1 className={styles.heroTitle}>Scholarship Details</h1>
-                    <div className={styles.breadcrumbs}>
-                        <Link to="/" className={styles.breadcrumbLink}>Home</Link>
-                        <span className={styles.separator}>|</span>
-                        <span>Scholarship Details</span>
-                    </div>
-                </div>
-            </div>
+            <PageBanner 
+                title="Scholarships"
+                breadcrumbs={[{ label: 'CBS' }, { label: 'Scholarships' }]}
+                subtitle="Empowering academic excellence through diverse financial aid programs and merit-based support."
+            />
 
             {/* Content Section */}
             <div className={styles.contentContainer}>

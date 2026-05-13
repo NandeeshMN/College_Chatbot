@@ -2,20 +2,16 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import styles from './Grievance.module.css';
 
+import PageBanner from '../components/common/PageBanner';
+
 const Grievance = () => {
     return (
         <div className={styles.pageContainer}>
-            {/* Hero Section */}
-            <div className={styles.heroSection}>
-                <div className="container">
-                    <h1 className={styles.heroTitle}>Grievance</h1>
-                    <div className={styles.breadcrumbs}>
-                        <Link to="/" className={styles.breadcrumbLink}>Home</Link>
-                        <span className={styles.separator}>|</span>
-                        <span>Grievance</span>
-                    </div>
-                </div>
-            </div>
+            <PageBanner 
+                title="Grievance Cell"
+                breadcrumbs={[{ label: 'Grievance' }]}
+                subtitle="Ensuring a fair, transparent, and supportive environment for all members of our community."
+            />
 
             {/* Content Section */}
             <div className={styles.contentContainer}>

@@ -24,22 +24,21 @@ const newsletterData = [
     }
 ];
 
+import PageBanner from '../components/common/PageBanner';
+
 const Chaitanya = () => {
+    const breadcrumbs = [
+        { label: 'CBS' },
+        { label: 'Chaitanya' }
+    ];
+
     return (
         <div className={styles.pageContainer}>
-            {/* Hero Section */}
-            <div className={styles.heroSection}>
-                <div className="container">
-                    <h1 className={styles.heroTitle}>Chaitanya</h1>
-                    <div className={styles.breadcrumbs}>
-                        <Link to="/" className={styles.breadcrumbLink}>Home</Link>
-                        <span className={styles.separator}>|</span>
-                        <span>CBS</span>
-                        <span className={styles.separator}>|</span>
-                        <span>Chaitanya</span>
-                    </div>
-                </div>
-            </div>
+            <PageBanner 
+                title="Chaitanya Newsletters"
+                breadcrumbs={breadcrumbs}
+                subtitle="Staying connected through our periodic newsletters, highlighting academic breakthroughs and campus news."
+            />
 
             {/* Content Section */}
             <div className={styles.contentContainer}>

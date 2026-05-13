@@ -14,22 +14,21 @@ const sankalpData = [
     { title: "SANKALP 2023-24", file: "https://drive.google.com/file/d/1m69sjxSJEAlpyR6QquzjHGRoeIhvg-f1/preview" } // Last item to be centered
 ];
 
+import PageBanner from '../components/common/PageBanner';
+
 const Sankalp = () => {
+    const breadcrumbs = [
+        { label: 'CBS' },
+        { label: 'Sankalp' }
+    ];
+
     return (
         <div className={styles.pageContainer}>
-            {/* Hero Section */}
-            <div className={styles.heroSection}>
-                <div className="container">
-                    <h1 className={styles.heroTitle}>Sankalp</h1>
-                    <div className={styles.breadcrumbs}>
-                        <Link to="/" className={styles.breadcrumbLink}>Home</Link>
-                        <span className={styles.separator}>|</span>
-                        <span>CBS</span>
-                        <span className={styles.separator}>|</span>
-                        <span>Sankalp</span>
-                    </div>
-                </div>
-            </div>
+            <PageBanner 
+                title="Sankalp Yearbooks"
+                breadcrumbs={breadcrumbs}
+                subtitle="A chronological journey through the academic achievements and vibrant culture of Chetan Business School."
+            />
 
             {/* Content Section */}
             <div className={styles.contentContainer}>

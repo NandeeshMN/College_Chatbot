@@ -13,24 +13,20 @@ import {
 } from 'lucide-react';
 import styles from './PlacementProcess.module.css';
 
+import PageBanner from '../../components/common/PageBanner';
+
 const PlacementProcess = () => {
     return (
         <div className={styles.pageContainer}>
             <Helmet>
-                <title>Placements | Chetan Business School, Hubballi</title>
+                <title>Placement Process | Chetan Business School, Hubballi</title>
             </Helmet>
-            {/* Hero Section */}
-            <div className={styles.heroSection}>
-                <div className={styles.heroOverlay}></div>
-                <div className="container">
-                    <h1 className={styles.heroTitle}>Placement Process</h1>
-                    <div className={styles.breadcrumbs}>
-                        <Link to="/" className={styles.breadcrumbLink}>Home</Link>
-                        <span className={styles.separator}>|</span>
-                        <span>Placement Process</span>
-                    </div>
-                </div>
-            </div>
+            
+            <PageBanner 
+                title="Placement Process"
+                breadcrumbs={[{ label: 'Placements' }, { label: 'Process' }]}
+                subtitle="A structured approach to connecting our talented students with top-tier global recruiters."
+            />
 
             <div className="container">
                 <h2 className={styles.pageTitle}>PLACEMENT PROCESS</h2>

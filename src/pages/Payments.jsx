@@ -3,20 +3,16 @@ import { Link } from 'react-router-dom';
 import styles from './Payments.module.css';
 import paymentQR from '../assets/images/payment.png';
 
+import PageBanner from '../components/common/PageBanner';
+
 const Payments = () => {
     return (
         <div className={styles.pageContainer}>
-            {/* Hero Section */}
-            <div className={styles.heroSection}>
-                <div className="container">
-                    <h1 className={styles.heroTitle}>Payments</h1>
-                    <div className={styles.breadcrumbs}>
-                        <Link to="/" className={styles.breadcrumbLink}>Home</Link>
-                        <span className={styles.separator}>|</span>
-                        <span>Payments</span>
-                    </div>
-                </div>
-            </div>
+            <PageBanner 
+                title="Fee Payments"
+                breadcrumbs={[{ label: 'CBS' }, { label: 'Payments' }]}
+                subtitle="Secure and convenient digital payment options for academic fees and institutional services."
+            />
 
             {/* Content Section */}
             <div className={styles.contentContainer}>

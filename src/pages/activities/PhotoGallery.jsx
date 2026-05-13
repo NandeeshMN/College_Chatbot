@@ -173,9 +173,16 @@ const categories = [
     'MCA'
 ];
 
+import PageBanner from '../../components/common/PageBanner';
+
 const PhotoGallery = () => {
     const [activeCategory, setActiveCategory] = useState('All');
     const [selectedIndex, setSelectedIndex] = useState(null);
+
+    const breadcrumbs = [
+        { label: 'Activities' },
+        { label: 'Photo Gallery' }
+    ];
 
     const filteredImages = activeCategory === 'All'
         ? galleryImages
@@ -216,19 +223,14 @@ const PhotoGallery = () => {
     return (
         <div className={styles.pageContainer}>
             <Helmet>
-                <title>Activities | Chetan Business School, Hubballi</title>
+                <title>Photo Gallery | Chetan Business School, Hubballi</title>
             </Helmet>
-            {/* Hero Section */}
-            <div className={styles.heroSection}>
-                <div className="container">
-                    <h1 className={styles.heroTitle}>Photo Gallery</h1>
-                    <div className={styles.breadcrumbs}>
-                        <Link to="/" className={styles.breadcrumbLink}>Home</Link>
-                        <span className={styles.separator}>|</span>
-                        <span>Photo Gallery</span>
-                    </div>
-                </div>
-            </div>
+            
+            <PageBanner 
+                title="Photo Gallery"
+                breadcrumbs={breadcrumbs}
+                subtitle="A visual journey through the vibrant life, events, and achievements at Chetan Business School."
+            />
 
             <div className="container">
                 {/* Filter Buttons */}

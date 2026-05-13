@@ -1,27 +1,26 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
-import { Link } from 'react-router-dom';
-import { Check, Download, FileText } from 'lucide-react';
+import { Check, Download } from 'lucide-react';
 import styles from './MBAProgram.module.css';
+import PageBanner from '../../components/common/PageBanner';
 
 const MBAProgram = () => {
+    const breadcrumbs = [
+        { label: 'Programs', url: '/programs/mba' },
+        { label: 'MBA' }
+    ];
+
     return (
         <div className={styles.pageContainer}>
             <Helmet>
-                <title>Programs | Chetan Business School, Hubballi</title>
+                <title>MBA Program | Chetan Business School, Hubballi</title>
             </Helmet>
-            {/* Hero Section */}
-            <div className={styles.heroSection}>
-                <div className={styles.heroOverlay}></div>
-                <div className="container">
-                    <h1 className={styles.heroTitle}>Master of Business Administration (MBA)</h1>
-                    <div className={styles.breadcrumbs}>
-                        <Link to="/" className={styles.breadcrumbLink}>Home</Link>
-                        <span className={styles.separator}>|</span>
-                        <span>Master of Business Administration (MBA)</span>
-                    </div>
-                </div>
-            </div>
+            
+            <PageBanner 
+                title="Master of Business Administration (MBA)"
+                breadcrumbs={breadcrumbs}
+                subtitle="Elevate your leadership trajectory with a global perspective. Our MBA combines rigorous analytical foundations with experiential learning."
+            />
 
             <div className={`container ${styles.contentWrapper}`}>
                 {/* Main Content */}

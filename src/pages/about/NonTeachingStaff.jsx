@@ -2,6 +2,7 @@ import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 import styles from './NonTeachingStaff.module.css';
+import PageBanner from '../../components/common/PageBanner';
 
 // Management Images removed as per layout
 
@@ -54,18 +55,11 @@ const NonTeachingStaff = () => {
             <Helmet>
                 <title>About Us | Chetan Business School, Hubballi</title>
             </Helmet>
-            {/* Hero Section */}
-            <div className={styles.heroSection}>
-                <div className={styles.heroOverlay}></div>
-                <div className="container">
-                    <h1 className={styles.heroTitle}>Non-Teaching Staff</h1>
-                    <div className={styles.breadcrumbs}>
-                        <Link to="/" className={styles.breadcrumbLink}>Home</Link>
-                        <span className={styles.separator}>|</span>
-                        <span>Non-Teaching Staff</span>
-                    </div>
-                </div>
-            </div>
+            <PageBanner 
+                title="Non-Teaching Staff"
+                breadcrumbs={[{ label: 'About Us' }, { label: 'Non-Teaching Staff' }]}
+                subtitle="The dedicated support team ensuring smooth campus operations and student success."
+            />
 
             <div className="container">
                 {/* Non-Teaching Staff Section */}

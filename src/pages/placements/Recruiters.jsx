@@ -40,23 +40,20 @@ const recruiters = [
     { id: 16, logo: download_1 },
 ];
 
+import PageBanner from '../../components/common/PageBanner';
+
 const Recruiters = () => {
     return (
         <div className={styles.pageContainer}>
             <Helmet>
-                <title>Placements | Chetan Business School, Hubballi</title>
+                <title>Our Recruiters | Chetan Business School, Hubballi</title>
             </Helmet>
-            {/* Hero Section */}
-            <div className={styles.heroSection}>
-                <div className="container">
-                    <h1 className={styles.heroTitle}>Recruiters</h1>
-                    <div className={styles.breadcrumbs}>
-                        <Link to="/" className={styles.breadcrumbLink}>Home</Link>
-                        <span className={styles.separator}>|</span>
-                        <span>Recruiters</span>
-                    </div>
-                </div>
-            </div>
+            
+            <PageBanner 
+                title="Our Recruiters"
+                breadcrumbs={[{ label: 'Placements' }, { label: 'Recruiters' }]}
+                subtitle="Partnering with industry leaders to provide exceptional career opportunities for our graduates."
+            />
 
             {/* Recruiters Grid */}
             <section className={styles.recruitersSection}>

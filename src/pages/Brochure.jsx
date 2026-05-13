@@ -11,22 +11,21 @@ const brochureData = [
     }
 ];
 
+import PageBanner from '../components/common/PageBanner';
+
 const Brochure = () => {
+    const breadcrumbs = [
+        { label: 'Placements' },
+        { label: 'Brochure 2024' }
+    ];
+
     return (
         <div className={styles.pageContainer}>
-            {/* Hero Section */}
-            <div className={styles.heroSection}>
-                <div className="container">
-                    <h1 className={styles.heroTitle}>Placement Brochure</h1>
-                    <div className={styles.breadcrumbs}>
-                        <Link to="/" className={styles.breadcrumbLink}>Home</Link>
-                        <span className={styles.separator}>|</span>
-                        <span>Placements</span>
-                        <span className={styles.separator}>|</span>
-                        <span>Brochure 2024</span>
-                    </div>
-                </div>
-            </div>
+            <PageBanner 
+                title="Placement Brochure"
+                breadcrumbs={breadcrumbs}
+                subtitle="Comprehensive insights into our recruitment ecosystem, student achievement, and corporate partnerships."
+            />
 
             {/* Content Section */}
             <div className={styles.contentContainer}>

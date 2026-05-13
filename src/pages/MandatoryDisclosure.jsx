@@ -3,6 +3,8 @@ import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 import styles from './MandatoryDisclosure.module.css';
 
+import PageBanner from '../components/common/PageBanner';
+
 const MandatoryDisclosure = ({ type }) => {
     const isMCA = type === 'MCA';
     const contentTitle = isMCA ? 'Mandatory Disclosure (MCA)' : 'Mandatory Disclosure (MBA)';
@@ -12,19 +14,12 @@ const MandatoryDisclosure = ({ type }) => {
             <Helmet>
                 <title>Mandatory Disclosure | Chetan Business School, Hubballi</title>
             </Helmet>
-            {/* Hero Section */}
-            <div className={styles.heroSection}>
-                <div className="container">
-                    <h1 className={styles.heroTitle}>Mandatory Disclosure</h1>
-                    <div className={styles.breadcrumbs}>
-                        <Link to="/" className={styles.breadcrumbLink}>Home</Link>
-                        <span className={styles.separator}>/</span>
-                        <span>CBS</span>
-                        <span className={styles.separator}>/</span>
-                        <span>Mandatory Disclosure</span>
-                    </div>
-                </div>
-            </div>
+            
+            <PageBanner 
+                title="Mandatory Disclosure"
+                breadcrumbs={[{ label: 'CBS' }, { label: 'Mandatory Disclosure' }]}
+                subtitle="Public accessibility to essential institutional data and regulatory compliance documentation."
+            />
 
             {/* Content Section */}
             <div className={`container ${styles.contentContainer}`}>

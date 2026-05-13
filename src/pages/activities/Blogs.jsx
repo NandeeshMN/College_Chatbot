@@ -5,6 +5,8 @@ import { ArrowRight, Search, Calendar, Tag } from 'lucide-react';
 import styles from './Blogs.module.css';
 import { blogData } from '../../data/blogs';
 
+import PageBanner from '../../components/common/PageBanner';
+
 const Blogs = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [activeCategory, setActiveCategory] = useState('All');
@@ -13,6 +15,11 @@ const Blogs = () => {
     useEffect(() => {
         window.scrollTo(0, 0);
     }, []);
+
+    const breadcrumbs = [
+        { label: 'Activities' },
+        { label: 'Blogs' }
+    ];
 
     // Extract unique categories and their counts
     const categoriesWithCounts = useMemo(() => {
@@ -38,21 +45,15 @@ const Blogs = () => {
     return (
         <div className={styles.pageContainer}>
             <Helmet>
-                <title>Blogs | Chetan Business School, Hubballi</title>
+                <title>Blogs & Insights | Chetan Business School, Hubballi</title>
                 <meta name="description" content="Stay updated with the latest insights, trends, and expert opinions from Chetan Business School." />
             </Helmet>
 
-            {/* Hero Section */}
-            <div className={styles.heroSection}>
-                <div className="container">
-                    <h1 className={styles.heroTitle}>Our Blogs & Insights</h1>
-                    <div className={styles.breadcrumbPill}>
-                        <Link to="/" className={styles.breadcrumbLink}>Home</Link>
-                        <span className={styles.separator}>|</span>
-                        <span>Blogs</span>
-                    </div>
-                </div>
-            </div>
+            <PageBanner 
+                title="Blogs & Insights"
+                breadcrumbs={breadcrumbs}
+                subtitle="Explore academic perspectives, industry trends, and campus stories from our community."
+            />
 
             <div className="container">
                 <div className={styles.contentWrapper}>

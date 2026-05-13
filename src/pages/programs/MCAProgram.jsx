@@ -4,24 +4,25 @@ import { Link } from 'react-router-dom';
 import { Check, Download } from 'lucide-react';
 import styles from './MCAProgram.module.css';
 
+import PageBanner from '../../components/common/PageBanner';
+
 const MCAProgram = () => {
+    const breadcrumbs = [
+        { label: 'Programs', url: '/programs/mca' },
+        { label: 'MCA' }
+    ];
+
     return (
         <div className={styles.pageContainer}>
             <Helmet>
-                <title>Programs | Chetan Business School, Hubballi</title>
+                <title>MCA Program | Chetan Business School, Hubballi</title>
             </Helmet>
-            {/* Hero Section */}
-            <div className={styles.heroSection}>
-                <div className={styles.heroOverlay}></div>
-                <div className="container">
-                    <h1 className={styles.heroTitle}>Master of Computer Applications (MCA)</h1>
-                    <div className={styles.breadcrumbs}>
-                        <Link to="/" className={styles.breadcrumbLink}>Home</Link>
-                        <span className={styles.separator}>|</span>
-                        <span>Master of Computer Applications (MCA)</span>
-                    </div>
-                </div>
-            </div>
+            
+            <PageBanner 
+                title="Master of Computer Applications (MCA)"
+                breadcrumbs={breadcrumbs}
+                subtitle="Equipping the next generation of IT leaders with advanced technical expertise and analytical skills."
+            />
 
             <div className={`container ${styles.contentWrapper}`}>
                 {/* Main Content */}

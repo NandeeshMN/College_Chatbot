@@ -4,24 +4,24 @@ import { Link } from 'react-router-dom';
 import { Phone, MapPin } from 'lucide-react';
 import styles from './Contact.module.css';
 
+import PageBanner from '../components/common/PageBanner';
+
 const Contact = () => {
+    const breadcrumbs = [
+        { label: 'Contact Us' }
+    ];
+
     return (
         <div className={styles.pageContainer}>
             <Helmet>
                 <title>Contact Us | Chetan Business School, Hubballi</title>
             </Helmet>
-            {/* Hero Section */}
-            <div className={styles.heroSection}>
-                <div className={styles.heroOverlay}></div>
-                <div className="container">
-                    <h1 className={styles.heroTitle}>Contact Us</h1>
-                    <div className={styles.breadcrumbs}>
-                        <Link to="/" className={styles.breadcrumbLink}>Home</Link>
-                        <span className={styles.separator}>|</span>
-                        <span>Contact Us</span>
-                    </div>
-                </div>
-            </div>
+            
+            <PageBanner 
+                title="Contact Us"
+                breadcrumbs={breadcrumbs}
+                subtitle="We're here to help. Reach out to us for any queries about admissions, courses, or campus life."
+            />
 
             <div className={`container ${styles.contentWrapper}`}>
                 <h2 className={styles.sectionTitle}>Get In Touch <span className={styles.highlight}>With Us</span></h2>

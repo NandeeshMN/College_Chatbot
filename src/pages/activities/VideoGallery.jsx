@@ -3,6 +3,8 @@ import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 import styles from './VideoGallery.module.css';
 
+import PageBanner from '../../components/common/PageBanner';
+
 const VideoGallery = () => {
     // Extracted exactly as requested
     const videoIds = [
@@ -15,22 +17,22 @@ const VideoGallery = () => {
         "i1J5eLZTirM"
     ];
 
+    const breadcrumbs = [
+        { label: 'Activities' },
+        { label: 'Video Gallery' }
+    ];
+
     return (
         <div className={styles.pageContainer}>
             <Helmet>
-                <title>Activities | Chetan Business School, Hubballi</title>
+                <title>Video Gallery | Chetan Business School, Hubballi</title>
             </Helmet>
-            {/* Hero Section */}
-            <div className={styles.heroSection}>
-                <div className="container">
-                    <h1 className={styles.heroTitle}>Video Gallery</h1>
-                    <div className={styles.breadcrumbs}>
-                        <Link to="/" className={styles.breadcrumbLink}>Home</Link>
-                        <span className={styles.separator}>|</span>
-                        <span>Video Gallery</span>
-                    </div>
-                </div>
-            </div>
+            
+            <PageBanner 
+                title="Video Gallery"
+                breadcrumbs={breadcrumbs}
+                subtitle="Explore our campus life and events through our curated collection of videos."
+            />
 
             {/* Content Section */}
             <div className="container">

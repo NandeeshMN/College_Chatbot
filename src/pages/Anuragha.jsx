@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
 import styles from './Anuragha.module.css';
+import PageBanner from '../components/common/PageBanner';
 
 // Dynamically import all images from assets/anuragha
 const imageModules = import.meta.glob('../assets/anuragha/Anuragha-img*.png', { eager: true });
@@ -24,6 +25,11 @@ const visitImages = allImages.slice(16, 26); // img17 to img26
 const Anuragha = () => {
     const [selectedImageIndex, setSelectedImageIndex] = useState(null);
 
+    const breadcrumbs = [
+        { label: 'CBS' },
+        { label: 'Anuragha' }
+    ];
+
     // Handle ESC key to close modal
     useEffect(() => {
         const handleEsc = (event) => {
@@ -34,7 +40,6 @@ const Anuragha = () => {
     }, []);
 
     const openLightbox = (imageNum) => {
-        // Find the index in the original sorted array based on the image number
         const realIndex = allImages.findIndex(img => img.num === imageNum);
         setSelectedImageIndex(realIndex);
         document.body.style.overflow = 'hidden';
@@ -79,19 +84,11 @@ const Anuragha = () => {
 
     return (
         <div className={styles.pageContainer}>
-            {/* Hero Section */}
-            <div className={styles.heroSection}>
-                <div className="container">
-                    <h1 className={styles.heroTitle}>Anuragha</h1>
-                    <div className={styles.breadcrumbs}>
-                        <Link to="/" className={styles.breadcrumbLink}>Home</Link>
-                        <span className={styles.separator}>|</span>
-                        <span>CBS</span>
-                        <span className={styles.separator}>|</span>
-                        <span>Anuragha</span>
-                    </div>
-                </div>
-            </div>
+            <PageBanner 
+                title="Anuragha"
+                breadcrumbs={breadcrumbs}
+                subtitle="Celebrating institutional milestones and spiritual guidance through a visual narrative."
+            />
 
             <div className="container">
                 {/* 1. QUOTE SECTION (TOP) */}
