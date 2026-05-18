@@ -134,48 +134,51 @@ const processForDB = (question) => {
 const calculateScore = (userTokensRaw, userTokensIntent, dbTokensRaw, dbTokensIntent) => {
     if (!userTokensRaw.length || !dbTokensRaw.length) return 0;
     
-    let totalScore = 0;
-    const SIMILARITY_THRESHOLD = 0.7;
+    let exactMatches = 0;
+    let intentMatches = 0;
+    let partialMatches = 0;
 
-    for (let i = 0; i < userTokensRaw.length; i++) {
-        const uTokenRaw = userTokensRaw[i];
-        const uTokenIntent = userTokensIntent[i];
-        let bestTokenScore = 0;
-
-        for (let j = 0; j < dbTokensRaw.length; j++) {
-            const dbTokenRaw = dbTokensRaw[j];
-            const dbTokenIntent = dbTokensIntent[j];
-            let currentScore = 0;
-
-            // 1. Intent Match -> Highest score (+3)
-            if (uTokenIntent === dbTokenIntent && INTENT_MAP[uTokenRaw]) {
-                currentScore = 3.0; // Synonym/Intent trigger
-            }
-            // 2. Exact match -> High score (+2)
-            else if (uTokenRaw === dbTokenRaw) {
-                currentScore = 2.0;
-            } 
-            // 3. Partial match -> Medium score (+1.5)
-            else if (uTokenRaw.length >= 3 && dbTokenRaw.length >= 3 && (dbTokenRaw.includes(uTokenRaw) || uTokenRaw.includes(dbTokenRaw))) {
-                currentScore = 1.5;
-            } 
-            // 4. Fuzzy match -> Backup score (+1)
-            else {
-                const sim = stringSimilarity(uTokenRaw, dbTokenRaw);
-                if (sim > SIMILARITY_THRESHOLD) {
-                    currentScore = 1.0;
+    userTokensRaw.forEach(u => {
+        if (dbTokensRaw.includes(u)) {
+            exactMatches++;
+        } else {
+            // Check for partial/fuzzy match only if no exact match
+            for (const d of dbTokensRaw) {
+                if (d.length >= 3 && u.length >= 3 && (d.includes(u) || u.includes(d))) {
+                    partialMatches += 0.8;
+                    break;
+                }
+                const sim = stringSimilarity(u, d);
+                if (sim > 0.8) {
+                    partialMatches += 0.5;
+                    break;
                 }
             }
-
-            if (currentScore > bestTokenScore) {
-                bestTokenScore = currentScore;
-            }
         }
+    });
 
-        totalScore += bestTokenScore;
-    }
-    
-    return totalScore;
+    userTokensIntent.forEach(u => {
+        if (dbTokensIntent.includes(u)) {
+            intentMatches++;
+        }
+    });
+
+    // Scoring logic:
+    // 1. Exact matches are king (weight: 4.0)
+    // 2. Intent matches are good for flexibility (weight: 1.5)
+    // 3. Partial matches (weight: 1.0)
+    let rawScore = (exactMatches * 4.0) + (intentMatches * 1.5) + (partialMatches * 1.0);
+
+    // 4. Bonus for coverage: Did we match most of the user's query?
+    const coverage = (exactMatches + (intentMatches * 0.5)) / userTokensRaw.length;
+    rawScore *= (1 + coverage);
+
+    // 5. Length penalty: Prefer concise matches (density)
+    // If a DB entry has 20 words but only matches 2, it's lower quality than a 3-word entry matching 2.
+    const density = (exactMatches + intentMatches) / dbTokensRaw.length;
+    rawScore *= (0.5 + density * 0.5);
+
+    return rawScore;
 };
 
 /**

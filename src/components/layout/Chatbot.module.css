@@ -324,6 +324,11 @@
     border-top-left-radius: 0;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
     color: var(--color-gray-800);
+    text-align: justify;
+    text-justify: inter-word;
+    word-break: break-word;
+    hyphens: auto;
+    text-align-last: left;
 }
 
 .user {

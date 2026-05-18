@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { MessageCircle, X, Send, Mic, Settings, Sparkles } from 'lucide-react';
+import { MessageCircle, X, Send, Mic, Settings, Sparkles, Volume2 } from 'lucide-react';
 import styles from './Chatbot.module.css';
 import { Link } from 'react-router-dom';
 
@@ -70,6 +70,28 @@ const Chatbot = () => {
         localStorage.setItem('chatbotAnimationEnabled', JSON.stringify(newValue));
     };
 
+    const speakText = (text) => {
+        if ('speechSynthesis' in window) {
+            // Clean text: remove emojis, bullets, and special symbols
+            const cleanText = text
+                // Remove common emojis ranges
+                .replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F600}-\u{1F64F}\u{1F680}-\u{1F6FF}\u{1FA00}-\u{1FAFF}]/gu, '')
+                // Remove specific bullet points and standalone symbols
+                .replace(/[•●▪📌🎓📚📝🙏😊👋👉✔]/g, '')
+                // Remove extra whitespace left behind
+                .replace(/\s+/g, ' ')
+                .trim();
+
+            // Cancel any ongoing speech
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(cleanText);
+            utterance.lang = 'en-IN';
+            window.speechSynthesis.speak(utterance);
+        } else {
+            alert("Sorry, your browser doesn't support text to speech!");
+        }
+    };
+
     const handleVoiceInput = () => {
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         if (!SpeechRecognition) {
@@ -77,9 +99,19 @@ const Chatbot = () => {
             return;
         }
 
+        // If already listening, stop it
+        if (isListening) {
+            window.chatbotRecognition?.stop();
+            return;
+        }
+
         const recognition = new SpeechRecognition();
+        window.chatbotRecognition = recognition; // Store in window to allow stopping
+        
         recognition.lang = 'en-IN';
         recognition.interimResults = false;
+        recognition.continuous = false;
+        recognition.maxAlternatives = 1;
 
         recognition.onstart = () => {
             setIsListening(true);
@@ -87,20 +119,38 @@ const Chatbot = () => {
 
         recognition.onend = () => {
             setIsListening(false);
+            window.chatbotRecognition = null;
         };
 
         recognition.onresult = (event) => {
             const transcript = event.results[0][0].transcript;
-            setUserInput(transcript);
-            sendMessage(transcript);
+            if (transcript) {
+                setUserInput(transcript);
+                sendMessage(transcript);
+            }
         };
 
         recognition.onerror = (event) => {
             console.error("Speech recognition error:", event.error);
             setIsListening(false);
+            
+            if (event.error === 'not-allowed') {
+                alert("Microphone access denied. Please enable microphone permissions in your browser settings.");
+            } else if (event.error === 'network') {
+                alert("Network error occurred. Voice recognition requires an internet connection.");
+            } else if (event.error === 'no-speech') {
+                // Ignore no-speech error as it's common and handled by onend
+            } else {
+                alert("Speech recognition error: " + event.error);
+            }
         };
 
-        recognition.start();
+        try {
+            recognition.start();
+        } catch (err) {
+            console.error("Failed to start recognition:", err);
+            setIsListening(false);
+        }
     };
 
     const options = [
@@ -256,8 +306,32 @@ const Chatbot = () => {
                             <div 
                                 key={index} 
                                 className={`${styles.message} ${styles[msg.type]} ${isAnimationEnabled ? styles.floatingMessage : ''}`}
+                                style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}
                             >
-                                {msg.type === 'bot' ? formatResponse(msg.text) : msg.text}
+                                {msg.type === 'bot' && (
+                                    <button
+                                        onClick={() => speakText(msg.text)}
+                                        title="Listen"
+                                        style={{
+                                            background: 'transparent',
+                                            border: 'none',
+                                            cursor: 'pointer',
+                                            color: '#1a365d',
+                                            padding: '2px',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            opacity: 0.7,
+                                            marginTop: '2px'
+                                        }}
+                                        onMouseEnter={(e) => e.target.style.opacity = 1}
+                                        onMouseLeave={(e) => e.target.style.opacity = 0.7}
+                                    >
+                                        <Volume2 size={16} />
+                                    </button>
+                                )}
+                                <div>
+                                    {msg.type === 'bot' ? formatResponse(msg.text) : msg.text}
+                                </div>
                             </div>
                         );
                     })}

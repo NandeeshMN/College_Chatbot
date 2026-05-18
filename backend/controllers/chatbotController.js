@@ -189,54 +189,56 @@ Here are some things I can help you with:
         "Contact Us"
     ];
 
-    // 3. Structured Matching logic with Controlled Fallback
-    if (detectedIntent) {
-        response = await getStructuredResponse(pool, detectedIntent, entity, message);
-        
-        if (response) {
-            systemUsed = 'structured';
-            console.log('✅ Structured Match Found');
+    // 3. PRIORITY 1: High-Confidence Admin Matches (chatbot_data)
+    // If the admin added a specific question that matches almost exactly, use it first.
+    const userTokensRaw = tokenize(cleanedInput);
+    const userTokensIntent = userTokensRaw.map(t => mapToIntent(t));
+
+    const [allChatbotData] = await pool.execute('SELECT * FROM chatbot_data');
+    let bestAdminMatch = null;
+    let highestAdminScore = 0;
+
+    for (const row of allChatbotData) {
+        let dbTokensRaw, dbTokensIntent;
+        if (row.tokens && row.intent_tokens) {
+            dbTokensRaw = JSON.parse(row.tokens);
+            dbTokensIntent = JSON.parse(row.intent_tokens);
         } else {
-            // Controlled fallback if intent is detected but no response found in matrix
-            response = fallbackMessage;
-            systemUsed = 'structured-fallback';
-            console.log('⚠️ Intent detected but no structured response. Using controlled fallback.');
+            dbTokensRaw = tokenize(row.question);
+            dbTokensIntent = dbTokensRaw.map(t => mapToIntent(t));
         }
-    } 
-    // 4. Token-based Fallback (Old System) - ONLY if no intent was detected
-    else {
-        const userTokensRaw = tokenize(cleanedInput);
-        const userTokensIntent = userTokensRaw.map(t => mapToIntent(t));
-
-        const [rows] = await pool.execute('SELECT * FROM chatbot_data');
-
-        let bestMatch = null;
-        let highestScore = 0;
-
-        for (const row of rows) {
-            let dbTokensRaw, dbTokensIntent;
-            if (row.tokens && row.intent_tokens) {
-                dbTokensRaw = JSON.parse(row.tokens);
-                dbTokensIntent = JSON.parse(row.intent_tokens);
-            } else {
-                dbTokensRaw = tokenize(row.question);
-                dbTokensIntent = dbTokensRaw.map(t => mapToIntent(t));
-            }
-            
-            const score = calculateScore(userTokensRaw, userTokensIntent, dbTokensRaw, dbTokensIntent);
-
-            if (score > highestScore) {
-                highestScore = score;
-                bestMatch = row;
-            }
+        
+        const score = calculateScore(userTokensRaw, userTokensIntent, dbTokensRaw, dbTokensIntent);
+        if (score > highestAdminScore) {
+            highestAdminScore = score;
+            bestAdminMatch = row;
         }
+    }
 
-        if (bestMatch && highestScore > 0) {
-            response = bestMatch.answer;
-            matchedId = bestMatch.data_id;
-            systemUsed = 'token';
-            console.log(`✅ Token Match: ID ${matchedId} (Score: ${highestScore.toFixed(2)})`);
+    // High confidence threshold (e.g., 0.85 means very strong token match)
+    if (bestAdminMatch && highestAdminScore >= 0.85) {
+        response = bestAdminMatch.answer;
+        matchedId = bestAdminMatch.data_id;
+        systemUsed = 'admin-priority';
+        console.log(`✅ Admin Priority Match: ID ${matchedId} (Score: ${highestAdminScore.toFixed(2)})`);
+    }
+
+    // 4. PRIORITY 2: Structured Matching (response_matrix)
+    if (!response && detectedIntent) {
+        const matrixResponse = await getStructuredResponse(pool, detectedIntent, entity, message);
+        if (matrixResponse) {
+            response = matrixResponse;
+            systemUsed = 'structured';
+            console.log('✅ Structured Match Found (response_matrix)');
         }
+    }
+
+    // 5. PRIORITY 3: Lower-Confidence Token Matching (chatbot_data fallback)
+    if (!response && bestAdminMatch && highestAdminScore > 0) {
+        response = bestAdminMatch.answer;
+        matchedId = bestAdminMatch.data_id;
+        systemUsed = 'token';
+        console.log(`✅ Token Fallback Match: ID ${matchedId} (Score: ${highestAdminScore.toFixed(2)})`);
     }
 
     // 5. Final Fallback & Unanswered Query Logging

@@ -176,8 +176,12 @@ exports.resetPassword = async (req, res, next) => {
             return res.status(400).json({ success: false, message: 'Passwords do not match' });
         }
 
-        if (newPassword.length < 8) {
-            return res.status(400).json({ success: false, message: 'Password must be at least 8 characters' });
+        const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        if (!strongPasswordRegex.test(newPassword)) {
+            return res.status(400).json({ 
+                success: false, 
+                message: 'Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character.' 
+            });
         }
 
         const emailLower = email.trim().toLowerCase();

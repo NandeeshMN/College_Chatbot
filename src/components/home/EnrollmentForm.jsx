@@ -46,7 +46,7 @@ const EnrollmentForm = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        
+
         const newErrors = {};
 
         // Strict Validation
@@ -120,7 +120,7 @@ const EnrollmentForm = () => {
                     <span className={styles.highlightText}>Enroll Now!</span> For MBA & MCA
                 </h2>
             </div>
-            
+
             <div className={styles.formContainerBg}>
                 <div className={`container ${styles.formContainer}`}>
                     <form className={styles.form} onSubmit={handleSubmit} noValidate>
@@ -136,7 +136,7 @@ const EnrollmentForm = () => {
                                     required
                                 />
                             </div>
-                            
+
                             <div className={styles.formGroup}>
                                 <input
                                     type="email"
@@ -184,7 +184,7 @@ const EnrollmentForm = () => {
                             <div className={styles.formGroupFull}>
                                 <textarea
                                     name="message"
-                                    placeholder="Message Short & Sweet Please *"
+                                    placeholder="Short Message*"
                                     value={formData.message}
                                     onChange={handleChange}
                                     className={`${styles.textArea} ${errors.message ? styles.errorField : ''}`}
