@@ -292,14 +292,71 @@ const Chatbot = () => {
 
                 <div className={styles.messages}>
                     {messages.map((msg, index) => {
-                        // Helper to format text with bullets and line breaks
+                        // Helper to normalize and render text with proper line breaks and formatting
                         const formatResponse = (text) => {
-                            if (!text) return "";
-                            return text
-                                .replace(/([•●])/g, '\n$1') // New line before bullets
-                                .replace(/(\d+\.)\s/g, '\n$1 ') // New line before numbered lists
-                                .replace(/(\n\s*){3,}/g, '\n\n') // Max 2 newlines
+                            if (!text) return null;
+
+                            // 1. Normalize Unicode quirks
+                            let normalized = text
+                                .replace(/\u00a0/g, ' ')        // non-breaking space → regular space
+                                .replace(/\u2014/g, '\u2014')   // keep em-dash as-is for now
+                                .replace(/\r\n/g, '\n')         // Windows CRLF → LF
+                                .replace(/\r/g, '\n');           // old Mac CR → LF
+
+                            // 2. Ensure bullet symbols get their own line
+                            normalized = normalized
+                                .replace(/([•●▪])\s*/g, '\n$1 ')
+                                .replace(/(\d+\.)\s+/g, '\n$1 ')
+                                .replace(/(\n\s*){3,}/g, '\n\n') // collapse 3+ blank lines → max 2
                                 .trim();
+
+                            // 3. Split into lines and render each as a <div>
+                            const lines = normalized.split('\n');
+
+                            return lines.map((line, i) => {
+                                const trimmed = line.trim();
+                                if (!trimmed) {
+                                    // Blank line → small spacer
+                                    return <div key={i} style={{ height: '6px' }} />;
+                                }
+
+                                // 4. Convert "• Name — Designation" → "• Name (Designation)"
+                                //    Matches bullet + text + em-dash + designation at end of line
+                                const bulletEmDash = trimmed.match(/^([•●▪]\s*)(.+?)\s*\u2014\s*(.+)$/);
+                                if (bulletEmDash) {
+                                    const [, bullet, name, designation] = bulletEmDash;
+                                    return (
+                                        <div key={i} style={{ marginBottom: '4px', lineHeight: '1.55' }}>
+                                            {bullet}<strong>{name}</strong>{` (${designation})`}
+                                        </div>
+                                    );
+                                }
+
+                                // 5. Plain bullet line (no em-dash)
+                                if (/^[•●▪]/.test(trimmed)) {
+                                    return (
+                                        <div key={i} style={{ marginBottom: '4px', lineHeight: '1.55' }}>
+                                            {trimmed}
+                                        </div>
+                                    );
+                                }
+
+                                // 6. Numbered list item
+                                if (/^\d+\./.test(trimmed)) {
+                                    return (
+                                        <div key={i} style={{ marginBottom: '4px', lineHeight: '1.55', paddingLeft: '4px' }}>
+                                            {trimmed}
+                                        </div>
+                                    );
+                                }
+
+                                // 7. Regular paragraph line
+                                return (
+                                    <div key={i} style={{ marginBottom: '2px', lineHeight: '1.6' }}>
+                                        {trimmed}
+                                    </div>
+                                );
+                            });
                         };
 
                         return (
