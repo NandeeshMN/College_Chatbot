@@ -38,6 +38,7 @@ The system includes dynamic web pages and an admin panel to manage content and c
 - Secure admin login
 - Update chatbot knowledge base
 - Add/Edit/Delete data
+- Reset password using email
 
 ---
 
