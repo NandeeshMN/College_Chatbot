@@ -38,6 +38,7 @@ ul {
 
 img {
     max-width: 100%;
+    height: auto;
     display: block;
 }
 
@@ -49,6 +50,7 @@ button {
 }
 
 .container {
+    width: 100%;
     max-width: var(--spacing-container);
     margin: 0 auto;
     padding: 0 var(--spacing-padding);
@@ -57,3 +59,79 @@ button {
 .section {
     padding: 4rem 0;
 }
+
+/* Responsive Utilities & Reset */
+html, body {
+    overflow-x: hidden;
+    width: 100%;
+}
+
+/* Remove legacy header offset from all subpages */
+[class*="pageContainer"] {
+    padding-top: 0 !important;
+}
+
+/* ─── Tablet (hamburger visible, header is slim ~80px) ─── */
+@media (max-width: 1023px) {
+    :root {
+        --spacing-padding: 1.5rem;
+    }
+    /* Subpage hero banners */
+    [class*="heroSection"] {
+        margin-top: 0 !important;
+        padding-top: clamp(2rem, 5vw, 4rem) !important;
+        padding-bottom: 60px !important;
+        min-height: auto !important;
+    }
+    [class*="heroTitle"],
+    [class*="title"] {
+        font-size: 2.75rem !important;
+    }
+    [class*="banner"] {
+        margin-top: 0 !important;
+        padding-top: clamp(2rem, 5vw, 4rem) !important;
+        padding-bottom: 80px !important;
+        min-height: auto !important;
+    }
+}
+
+/* ─── Mobile ─── */
+@media (max-width: 768px) {
+    :root {
+        --spacing-padding: 1rem;
+    }
+    .section {
+        padding: 2.5rem 0;
+    }
+    /* Subpage Hero banner overrides matching any hashed module class name */
+    [class*="heroSection"] {
+        margin-top: 0 !important;
+        padding-top: clamp(1rem, 3vw, 2rem) !important;
+        padding-bottom: 40px !important;
+        min-height: auto !important;
+        margin-bottom: 2rem !important;
+    }
+    [class*="heroTitle"] {
+        font-size: 2.25rem !important;
+        margin-bottom: 1rem !important;
+    }
+    [class*="breadcrumbs"] {
+        padding: 8px 20px !important;
+        font-size: 0.9rem !important;
+    }
+    /* PageBanner component */
+    [class*="banner"] {
+        margin-top: 0 !important;
+        padding-top: clamp(1rem, 3vw, 2rem) !important;
+        padding-bottom: 60px !important;
+        min-height: auto !important;
+        background-attachment: scroll !important;
+    }
+    [class*="title"] {
+        font-size: 2rem !important;
+        line-height: 1.2 !important;
+    }
+    [class*="subtitle"] {
+        font-size: 1rem !important;
+    }
+}

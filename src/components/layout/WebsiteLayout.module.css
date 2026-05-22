@@ -1,0 +1,12 @@
+/* Desktop: topBar (~50px) + navbar (~125px) = ~175px total */
+.main {
+    min-height: 80vh;
+    padding-top: 175px;
+}
+
+/* Tablet: topBar hidden, navbar shrinks to ~80px */
+@media (max-width: 1023px) {
+    .main {
+        padding-top: 80px;
+    }
+}

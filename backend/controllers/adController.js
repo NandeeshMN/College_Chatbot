@@ -46,10 +46,7 @@ exports.getActiveAd = async (req, res) => {
             'SELECT * FROM advertisements WHERE is_active = 1 ORDER BY display_order ASC'
         );
 
-        if (rows.length === 0) {
-            return res.status(404).json({ success: false, message: 'No active advertisements found' });
-        }
-
+        // Return empty array with 200 — no active ads is a valid state, not an error
         res.json({ success: true, data: rows });
     } catch (error) {
         console.error('Error fetching active ad:', error);

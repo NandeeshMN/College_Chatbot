@@ -149,3 +149,22 @@
     font-size: 0.85rem;
     opacity: 0.7;
 }
+
+@media (max-width: 768px) {
+    .footer {
+        padding-top: 2.5rem;
+        font-size: 0.9rem;
+    }
+    .footerContent {
+        gap: 2rem;
+        padding-bottom: 2.5rem;
+    }
+    .heading {
+        font-size: 1.05rem;
+        margin-bottom: 1rem;
+    }
+    .applyButton {
+        width: 100%;
+        text-align: center;
+    }
+}

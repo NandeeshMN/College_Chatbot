@@ -390,3 +390,20 @@
     margin-top: 1rem;
     display: block;
 }
+
+@media (max-width: 1023px) {
+    .topBar {
+        display: none !important;
+    }
+    .navbar {
+        min-height: 80px !important;
+        padding-top: 10px !important;
+        padding-bottom: 10px !important;
+    }
+    .logoImage {
+        height: 50px !important;
+    }
+    .mobileToggle {
+        color: var(--color-primary);
+    }
+}

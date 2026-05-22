@@ -135,3 +135,27 @@
     width: 10px;
     height: 10px;
 }
+
+@media (max-width: 768px) {
+    .heading {
+        font-size: 2rem;
+    }
+    .sliderBg {
+        padding: 3rem 0 4rem;
+    }
+    .slider {
+        min-height: 320px;
+    }
+    .quote {
+        font-size: 0.95rem;
+        margin-bottom: 1.5rem;
+        line-height: 1.5;
+    }
+    .quoteOutline {
+        font-size: 5rem;
+    }
+    .avatar {
+        width: 55px;
+        height: 55px;
+    }
+}
