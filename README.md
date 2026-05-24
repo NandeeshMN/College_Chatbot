@@ -3,7 +3,7 @@
 
 ### 📌 Project Description
 A college website integrated with an AI chatbot to provide academic information and automate student query handling. 
-The system includes dynamic web pages and an admin panel to manage content and chatbot responses efficiently.
+The system includes dynamic web pages and an admin panel to manage advertisements and chatbot responses efficiently.
 
 ---
 
@@ -37,6 +37,7 @@ The system includes dynamic web pages and an admin panel to manage content and c
 ### 🔐 Admin Features
 - Secure admin login
 - Update chatbot knowledge base
+- update advertisements
 - Add/Edit/Delete data
 - Reset password using email
 
