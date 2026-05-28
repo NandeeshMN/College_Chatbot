@@ -19,9 +19,9 @@ The system includes dynamic web pages and an admin panel to manage advertisement
 
 ### 🛠️ Tech Stack
 - Frontend: HTML, CSS, JavaScript,ReactJS
-- Backend: Node.js
+- Backend: Node.js, express.js
 - Database: MySQL
-- Chatbot:  AI-based logic
+- Chatbot:  AI-based logic, database driven
 
 ---
 
@@ -39,7 +39,7 @@ The system includes dynamic web pages and an admin panel to manage advertisement
 - Update chatbot knowledge base
 - update advertisements
 - Add/Edit/Delete data
-- Reset password using email
+- Reset password using email (brevo)
 
 ---
 
