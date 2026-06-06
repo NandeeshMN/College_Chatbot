@@ -21,7 +21,7 @@ The system includes dynamic web pages and an admin panel to manage advertisement
 - Frontend: HTML, CSS, JavaScript,ReactJS
 - Backend: Node.js, express.js
 - Database: MySQL
-- Chatbot:  AI-based logic, database driven
+- Chatbot: database driven
 
 ---
 
