@@ -21,7 +21,7 @@ The system includes dynamic web pages and an admin panel to manage advertisement
 - Frontend: HTML, CSS, JavaScript,ReactJS
 - Backend: Node.js, express.js
 - Database: MySQL
-- Chatbot: database driven
+- Chatbot: Database Driven
 
 ---
 
@@ -39,7 +39,7 @@ The system includes dynamic web pages and an admin panel to manage advertisement
 - Update chatbot knowledge base
 - update advertisements
 - Add/Edit/Delete data
-- Reset password using email (brevo)
+- Reset password using email
 
 ---
 
