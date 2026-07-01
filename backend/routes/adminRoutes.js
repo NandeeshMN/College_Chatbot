@@ -8,7 +8,10 @@ const {
     forgotPassword,
     verifyOtp,
     resetPassword,
-    uploadChatbotExcel
+    uploadChatbotExcel,
+    getUnansweredQueries,
+    deleteUnansweredQuery,
+    clearUnansweredQueries
 } = require('../controllers/adminController');
 
 const router = express.Router();
@@ -53,5 +56,10 @@ router.post('/reset-password', resetPassword);
 
 // Bulk Upload Chatbot Data
 router.post('/chatbot/upload', upload.single('file'), uploadChatbotExcel);
+
+// Unanswered Queries Management
+router.get('/unanswered-queries', getUnansweredQueries);
+router.delete('/unanswered-queries/:id', deleteUnansweredQuery);
+router.delete('/unanswered-queries', clearUnansweredQueries);
 
 module.exports = router;

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { MessageSquare, Image, LogOut, LayoutDashboard, X, AlertTriangle } from 'lucide-react';
+import { MessageSquare, Image, LogOut, LayoutDashboard, X, AlertTriangle, FileQuestion } from 'lucide-react';
 
 const AdminSidebar = ({ isOpen, setIsOpen }) => {
     const navigate = useNavigate();
@@ -41,6 +41,11 @@ const AdminSidebar = ({ isOpen, setIsOpen }) => {
                     <NavLink to="/admin-dashboard/chatbot" style={linkStyle} onClick={() => setIsOpen(false)}>
                         <MessageSquare size={20} />
                         <span>Chatbot Data</span>
+                    </NavLink>
+                    
+                    <NavLink to="/admin-dashboard/unanswered-queries" style={linkStyle} onClick={() => setIsOpen(false)}>
+                        <FileQuestion size={20} />
+                        <span>Unanswered Queries</span>
                     </NavLink>
                     
                     <NavLink to="/admin-dashboard/ads" style={linkStyle} onClick={() => setIsOpen(false)}>

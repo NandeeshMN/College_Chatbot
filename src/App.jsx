@@ -18,6 +18,7 @@ import AdminLogin from './pages/admin/AdminLogin';
 import AdminLayout from './pages/admin/AdminLayout';
 import ChatbotManagement from './pages/admin/ChatbotManagement';
 import AdsManagement from './pages/admin/AdsManagement';
+import UnansweredQueries from './pages/admin/UnansweredQueries';
 import AdminDashboard from './pages/admin/AdminDashboard'; // Keep for redirect maybe? Or remove later
 import Grievance from './pages/Grievance';
 import MandatoryDisclosure from './pages/MandatoryDisclosure';
@@ -71,6 +72,7 @@ function App() {
           <Route index element={<ChatbotManagement />} />
           <Route path="chatbot" element={<ChatbotManagement />} />
           <Route path="ads" element={<AdsManagement />} />
+          <Route path="unanswered-queries" element={<UnansweredQueries />} />
         </Route>
       </Route>
 

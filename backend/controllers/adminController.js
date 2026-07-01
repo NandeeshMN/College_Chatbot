@@ -286,5 +286,38 @@ exports.uploadChatbotExcel = async (req, res) => {
     }
 };
 
+// ➤ GET UNANSWERED QUERIES
+exports.getUnansweredQueries = async (req, res) => {
+    try {
+        const [rows] = await pool.execute(
+            'SELECT * FROM unanswered_queries ORDER BY created_at DESC'
+        );
+        res.json({ success: true, data: rows });
+    } catch (error) {
+        console.error('Error fetching unanswered queries:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+};
 
+// ➤ DELETE UNANSWERED QUERY
+exports.deleteUnansweredQuery = async (req, res) => {
+    try {
+        const { id } = req.params;
+        await pool.execute('DELETE FROM unanswered_queries WHERE id = ?', [id]);
+        res.json({ success: true, message: 'Query deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting unanswered query:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+};
 
+// ➤ CLEAR ALL UNANSWERED QUERIES
+exports.clearUnansweredQueries = async (req, res) => {
+    try {
+        await pool.execute('DELETE FROM unanswered_queries');
+        res.json({ success: true, message: 'All queries cleared successfully' });
+    } catch (error) {
+        console.error('Error clearing unanswered queries:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+};
