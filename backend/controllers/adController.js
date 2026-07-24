@@ -28,6 +28,11 @@ exports.addAd = async (req, res) => {
 // ➤ GET ALL ADVERTISEMENTS
 exports.getAllAds = async (req, res) => {
     try {
+        // Automatically deactivate expired advertisements
+        await pool.execute(
+            'UPDATE advertisements SET is_active = FALSE WHERE end_date < CURRENT_DATE AND is_active = TRUE'
+        );
+
         const [rows] = await pool.execute(
             'SELECT * FROM advertisements ORDER BY display_order ASC'
         );
@@ -42,8 +47,13 @@ exports.getAllAds = async (req, res) => {
 // ➤ GET ACTIVE ADVERTISEMENTS FOR HOMEPAGE
 exports.getActiveAd = async (req, res) => {
     try {
+        // Automatically deactivate expired advertisements
+        await pool.execute(
+            'UPDATE advertisements SET is_active = FALSE WHERE end_date < CURRENT_DATE AND is_active = TRUE'
+        );
+
         const [rows] = await pool.execute(
-            'SELECT * FROM advertisements WHERE is_active = 1 ORDER BY display_order ASC'
+            'SELECT * FROM advertisements WHERE is_active = TRUE AND start_date <= CURRENT_DATE AND end_date >= CURRENT_DATE ORDER BY display_order ASC'
         );
 
         // Return empty array with 200 — no active ads is a valid state, not an error
