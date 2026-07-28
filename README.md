@@ -10,7 +10,7 @@ The system includes dynamic web pages and an admin panel to manage advertisement
 
 ### 🚀 Features
 - Dynamic college website (Home, About, Courses, Faculty, Contact)
-- AI-powered chatbot for student queries
+- AI-powered chatbot for students and parents queries
 - Admin panel for chatbot management and advertisement management
 - Add/Edit chatbot questions and answers
 - Responsive UI design
