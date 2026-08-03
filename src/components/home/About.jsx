@@ -26,7 +26,6 @@ const About = () => {
                         Our flagship two-year MBA & MCA program, accredited by AICTE and ISO and affiliated with Karnatak University,
                         combines rigorous academics with practical experience.
                     </p>
-                    <button className={styles.readMoreBtn}>Read More</button>
                 </div>
             </div>
         </section>
