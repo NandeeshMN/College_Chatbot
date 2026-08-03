@@ -3,6 +3,67 @@ import { MessageCircle, X, Send, Mic, Settings, Sparkles, Volume2 } from 'lucide
 import styles from './Chatbot.module.css';
 import { Link } from 'react-router-dom';
 
+const numberToIndianWords = (num) => {
+    const a = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
+    const b = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
+
+    if (num === 0) return 'zero';
+    if (num > 999999999) return null; // Fallback for very large numbers
+
+    const n = ('000000000' + num).slice(-9).match(/^(\d{2})(\d{2})(\d{2})(\d{1})(\d{2})$/);
+    if (!n) return null;
+
+    let str = '';
+    str += (n[1] != 0) ? (a[Number(n[1])] || b[n[1][0]] + (n[1][1] == 0 ? '' : ' ' + a[n[1][1]])) + ' crore ' : '';
+    str += (n[2] != 0) ? (a[Number(n[2])] || b[n[2][0]] + (n[2][1] == 0 ? '' : ' ' + a[n[2][1]])) + ' lakh ' : '';
+    str += (n[3] != 0) ? (a[Number(n[3])] || b[n[3][0]] + (n[3][1] == 0 ? '' : ' ' + a[n[3][1]])) + ' thousand ' : '';
+    str += (n[4] != 0) ? (a[Number(n[4])] || b[n[4][0]] + (n[4][1] == 0 ? '' : ' ' + a[n[4][1]])) + ' hundred ' : '';
+    str += (n[5] != 0) ? ((str != '') ? '' : '') + (a[Number(n[5])] || b[n[5][0]] + (n[5][1] == 0 ? '' : ' ' + a[n[5][1]])) : '';
+    
+    return str.trim();
+};
+
+const convertNumbersToIndianWords = (text) => {
+    return text.replace(/(₹\s*)?(\b\d+(?:,\d+)*\b)/g, (match, p1, p2) => {
+        const cleanNum = p2.replace(/,/g, '');
+        const num = parseInt(cleanNum, 10);
+        
+        // Only convert if it has ₹ symbol, OR if it's a large number (>= 1000)
+        // to avoid converting dates or small numbers unnecessarily.
+        if (!p1 && num < 1000) return match;
+        
+        const words = numberToIndianWords(num);
+        if (!words) return match; 
+        
+        if (p1) {
+            return words + ' rupees';
+        }
+        return words;
+    });
+};
+
+const getBestVoice = () => {
+    if (!('speechSynthesis' in window)) return null;
+    const voices = window.speechSynthesis.getVoices();
+    const preferredVoices = [
+        'Microsoft David',
+        'Microsoft Aria',
+        'Google UK English Female',
+        'Google US English',
+        'Microsoft Zira'
+    ];
+
+    for (const pref of preferredVoices) {
+        const voice = voices.find(v => v.name.includes(pref));
+        if (voice) return voice;
+    }
+
+    const englishVoice = voices.find(v => v.lang.startsWith('en'));
+    if (englishVoice) return englishVoice;
+
+    return voices.length > 0 ? (voices.find(v => v.default) || voices[0]) : null;
+};
+
 const Chatbot = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [messages, setMessages] = useState([]);
@@ -71,25 +132,57 @@ const Chatbot = () => {
     };
 
     const speakText = (text) => {
-        if ('speechSynthesis' in window) {
-            // Clean text: remove emojis, bullets, and special symbols
-            const cleanText = text
-                // Remove common emojis ranges
-                .replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F600}-\u{1F64F}\u{1F680}-\u{1F6FF}\u{1FA00}-\u{1FAFF}]/gu, '')
-                // Remove specific bullet points and standalone symbols
-                .replace(/[•●▪📌🎓📚📝🙏😊👋👉✔]/g, '')
-                // Remove extra whitespace left behind
-                .replace(/\s+/g, ' ')
-                .trim();
-
-            // Cancel any ongoing speech
-            window.speechSynthesis.cancel();
-            const utterance = new SpeechSynthesisUtterance(cleanText);
-            utterance.lang = 'en-IN';
-            window.speechSynthesis.speak(utterance);
-        } else {
-            alert("Sorry, your browser doesn't support text to speech!");
+        if (!('speechSynthesis' in window)) {
+            alert("Speech is not supported in this browser.");
+            return;
         }
+
+        // Cancel any ongoing speech
+        window.speechSynthesis.cancel();
+
+        // Clean text: replace bullets/newlines with natural pauses
+        let cleanText = text
+            // Remove markdown syntax like **, *, __, _, #
+            .replace(/[*_#`~]/g, '')
+            // Remove common emojis
+            .replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F600}-\u{1F64F}\u{1F680}-\u{1F6FF}\u{1FA00}-\u{1FAFF}]/gu, '')
+            // Remove leftover icons
+            .replace(/[📌🎓📚📝🙏😊👋👉✔]/g, '')
+            // Convert exact bullet characters to pauses
+            .replace(/[•●▪]/g, ' ... ')
+            // Convert consecutive line breaks into pauses
+            .replace(/\n+/g, ' ... ')
+            // Expand course acronyms for accurate TTS pronunciation
+            .replace(/\bPUC\s*\(Commerce\)/gi, "P U C Commerce")
+            .replace(/\bBCA\b/gi, "Bachelor of Computer Applications")
+            .replace(/\bB\.?Com\b/gi, "Bachelor of Commerce")
+            .replace(/\bBBA\b/gi, "Bachelor of Business Administration")
+            .replace(/\bMCA\b/gi, "Master of Computer Applications")
+            .replace(/\bMBA\b/gi, "Master of Business Administration")
+            // Insert pauses after punctuation
+            .replace(/([.,:;?!])\s+/g, '$1 ... ')
+            // Replace multiple spaces with a single space
+            .replace(/\s+/g, ' ')
+            .trim();
+
+        // Convert large numbers and currency to Indian spoken words
+        cleanText = convertNumbersToIndianWords(cleanText);
+
+        const utterance = new SpeechSynthesisUtterance(cleanText);
+        
+        // Setup speech options for slow, clear, natural reading
+        utterance.rate = 0.85;
+        utterance.pitch = 1;
+        utterance.volume = 1;
+
+        const bestVoice = getBestVoice();
+        if (bestVoice) {
+            utterance.voice = bestVoice;
+        } else {
+            utterance.lang = 'en-US';
+        }
+
+        window.speechSynthesis.speak(utterance);
     };
 
     const handleVoiceInput = () => {
@@ -109,7 +202,7 @@ const Chatbot = () => {
         window.chatbotRecognition = recognition; // Store in window to allow stopping
         
         recognition.lang = 'en-IN';
-        recognition.interimResults = false;
+        recognition.interimResults = true; // Enable real-time feedback
         recognition.continuous = false;
         recognition.maxAlternatives = 1;
 
@@ -123,10 +216,22 @@ const Chatbot = () => {
         };
 
         recognition.onresult = (event) => {
-            const transcript = event.results[0][0].transcript;
-            if (transcript) {
-                setUserInput(transcript);
-                sendMessage(transcript);
+            let interimTranscript = '';
+            let finalTranscript = '';
+
+            for (let i = event.resultIndex; i < event.results.length; ++i) {
+                if (event.results[i].isFinal) {
+                    finalTranscript += event.results[i][0].transcript;
+                } else {
+                    interimTranscript += event.results[i][0].transcript;
+                }
+            }
+
+            if (finalTranscript) {
+                setUserInput(finalTranscript);
+                sendMessage(finalTranscript);
+            } else if (interimTranscript) {
+                setUserInput(interimTranscript);
             }
         };
 
@@ -420,6 +525,7 @@ const Chatbot = () => {
 
                 <div className={styles.footer}>
                     <button 
+                        type="button"
                         className={`${styles.micBtn} ${isListening ? styles.activeMic : ''}`}
                         onClick={handleVoiceInput}
                         title="Voice Input"
