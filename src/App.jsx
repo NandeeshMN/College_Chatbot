@@ -1,5 +1,6 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
+import ScrollToTop from './components/layout/ScrollToTop';
 import ProtectedRoute from './components/admin/ProtectedRoute';
 import WebsiteLayout from './components/layout/WebsiteLayout';
 import Home from './pages/Home';
@@ -32,7 +33,9 @@ import ForgotPassword from './pages/admin/ForgotPassword';
 
 function App() {
   return (
-    <Routes>
+    <>
+      <ScrollToTop />
+      <Routes>
       {/* Public Website Routes */}
       <Route path="/" element={<WebsiteLayout />}>
         <Route index element={<Home />} />
@@ -80,6 +83,7 @@ function App() {
       <Route path="/admin-login" element={<AdminLogin />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
     </Routes>
+    </>
   );
 }
 
