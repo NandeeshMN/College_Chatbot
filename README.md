@@ -3,7 +3,7 @@
 ---
 
 ### 📌 Project Description
-A college website integrated with an AI chatbot to provide academic information and automate student query handling. 
+A college website integrated with an AI chatbot to provide academic information and automate student,parents query handling. 
 The system includes dynamic web pages and an admin panel to manage advertisements, unanswere queries and chatbot responses efficiently.
 
 ---
