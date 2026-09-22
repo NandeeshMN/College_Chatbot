@@ -37,7 +37,7 @@ The system includes dynamic web pages and an admin panel to manage advertisement
 ---
 
 ### 🔐 Admin Features
-- Secure admin login
+- Secure admin login using email and password
 - Update chatbot knowledge base
 - update advertisements
 - Update unanswered queries 
