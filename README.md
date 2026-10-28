@@ -42,18 +42,7 @@ The system includes dynamic web pages and an admin panel to manage advertisement
 - update advertisements
 - Update unanswered queries 
 - Add/Edit/Delete data
-- Reset password using email
-
----
-
-### 📊 Project Workflow
-- Requirement Analysis
-- Database Design (ER Diagram, DFD)
-- System Architecture Design
-- Development (Frontend + Backend + Chatbot)
-- Testing & Optimization
-- Deployment & Documentation
-
+- Reset password
 ---
 
 ### 🎯 Objective
