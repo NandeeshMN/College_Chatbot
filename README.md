@@ -22,7 +22,6 @@ The system includes dynamic web pages and an admin panel to manage advertisement
 - Frontend: HTML, CSS, JavaScript,ReactJS, Typescript 
 - Backend: Node.js, express.js
 - Database: MySQL
-- Chatbot: Database Driven
 - Email : Brevo and EmailJS
 
 ---
