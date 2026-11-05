@@ -2,13 +2,13 @@
 
 ---
 
-### 📌 Project Description
+### Project Description
 A college website integrated with an chatbot to provide academic information and automate student,parents query handling. 
 The system includes dynamic web pages and an admin panel to manage advertisements, answer queries and chatbot responses efficiently.
 
 ---
 
-### 🚀 Features
+### Features
 - Dynamic college website (Home, About, Courses, Faculty, Contact)
 - AI-powered chatbot for students and parents queries
 - Admin panel for chatbot management and advertisement management
@@ -18,7 +18,7 @@ The system includes dynamic web pages and an admin panel to manage advertisement
 
 ---
 
-### 🛠️ Tech Stack
+### Tech Stack
 - Frontend: HTML, CSS, JavaScript,ReactJS, Typescript 
 - Backend: Node.js, express.js
 - Database: MySQL
@@ -26,7 +26,7 @@ The system includes dynamic web pages and an admin panel to manage advertisement
 
 ---
 
-### ⚙️ Modules
+### Modules
 - College Information Module
 - Faculty & Department Module
 - Courses & Admission Module
@@ -35,7 +35,7 @@ The system includes dynamic web pages and an admin panel to manage advertisement
 
 ---
 
-### 🔐 Admin Features
+###  Admin Features
 - Secure admin login using email and password
 - Update chatbot knowledge base
 - update advertisements
@@ -44,7 +44,7 @@ The system includes dynamic web pages and an admin panel to manage advertisement
 - Reset password
 ---
 
-### 🎯 Objective
+### Objective
 - Improve communication between students and college
 - Automate query handling using chatbot
 - Provide centralized access to academic information
