@@ -48,7 +48,7 @@ The system includes dynamic web pages and an admin panel to manage advertisement
 - Improve communication between students and college
 - Automate query handling using chatbot
 - Provide centralized access to academic information
-- Provide information about faculty members 
+
 
 ---
 
